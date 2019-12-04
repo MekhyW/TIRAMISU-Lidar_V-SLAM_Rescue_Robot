@@ -3,5 +3,5 @@ Autonomous self-localization and mapping victim-identifying robot, created to co
 
 ### (To Be Written and Organized)
 
-![GitHub Logo](MekhyW/TIRAMISU---Lidar-Visual-SLAM-Rescue-Robot
+![GitHub Logo](/MekhyW/TIRAMISU---Lidar-Visual-SLAM-Rescue-Robot
 /TIRAMISU_CAD.png)
