@@ -1,5 +1,6 @@
 import PyLidar3
 import Poser
+import Navigator
 import math
 Sweeper = PyLidar3.YdLidarX4('COM13', 6000)
 Sweeper.Connect()
@@ -8,6 +9,7 @@ LandmarkMap = [[[0]*3]*1000]*1000
 PresenceMap = [[[0]*3]*1000]*1000
 WallMap = [[[-1]*3]*1000]*1000
 WallSplashMap = [[[0]*3]*1000]*1000
+WallWeightMap = [[[0]*3]*1000]*1000
 SweeperGenerator = None
 
 def SweeperOn(state):
@@ -27,20 +29,24 @@ def PlotWalls():
                     WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] = 0
                 elif(WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] == 1):
                     WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] = 0
-                    for c in range(-9, 9):
-                        for r in range(-9, 9):
+                    for c in range(-15, 15):
+                        for r in range(-15, 15):
                             if(math.sqrt((c*c)+(r*r)) <= 9):
                                 WallSplashMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] -= 1
+                            elif(math.sqrt((c*c)+(r*r)) <= 15 and WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] >= 15-math.sqrt((c*c)+(r*r))):
+                                WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] -= 15-math.sqrt((c*c)+(r*r))
             if(WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] == (-1) or WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] == 0):
                 WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] = 1
-                for c in range(-9, 9):
-                    for r in range(-9, 9):
+                for c in range(-15, 15):
+                    for r in range(-15, 15):
                         if(math.sqrt((c*c)+(r*r)) <= 9):
                             WallSplashMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] += 1
+                        elif(math.sqrt((c*c)+(r*r)) <= 15):
+                            WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] += 15-math.sqrt((c*c)+(r*r))
 
 def PlotPresence():
     for c in range(-15, 15):
-        for r in range(-15, 15):
+        for r in range(-10, 10):
             PresenceMap[Poser.CurrentFloor][Poser.RobotPositionX + c*math.cos(math.radians(Poser.RobotCompass))][Poser.RobotPositionY + r*math.sin(math.radians(Poser.RobotCompass))] = 1
 
 def PlotBlackTile():
