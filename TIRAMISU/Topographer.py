@@ -9,7 +9,7 @@ LandmarkMap = [[[0]*3]*1000]*1000
 PresenceMap = [[[0]*3]*1000]*1000
 WallMap = [[[-1]*3]*1000]*1000
 WallSplashMap = [[[0]*3]*1000]*1000
-WallWeightMap = [[[0]*3]*1000]*1000
+WallWeightMap = [[[1]*3]*1000]*1000
 SweeperGenerator = None
 
 def SweeperOn(state):
@@ -24,25 +24,27 @@ def PlotWalls():
     lidardata = next(SweeperGenerator)
     for angle in range(0, 360):
         if(lidardata[angle]>0):
+            AngCos = math.cos(math.radians(angle+Poser.RobotCompass))
+            AngSin = math.sin(math.radians(angle+Poser.RobotCompass))
             for i in lidardata[angle]*0.1:
-                if(WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] == (-1)):
-                    WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] = 0
-                elif(WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] == 1):
-                    WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] = 0
+                if(WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i*0.1*AngCos))][round(Poser.RobotPositionY+(i*0.1*AngSin))] == (-1)):
+                    WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i*0.1*AngCos))][round(Poser.RobotPositionY+(i*0.1*AngSin))] = 0
+                elif(WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i*0.1*AngCos))][round(Poser.RobotPositionY+(i*0.1*AngSin))] == 1):
+                    WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i*0.1*AngCos))][round(Poser.RobotPositionY+(i*0.1*AngSin))] = 0
                     for c in range(-15, 15):
                         for r in range(-15, 15):
                             if(math.sqrt((c*c)+(r*r)) <= 9):
-                                WallSplashMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] -= 1
-                            elif(math.sqrt((c*c)+(r*r)) <= 15 and WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] >= 15-math.sqrt((c*c)+(r*r))):
-                                WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(i * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] -= 15-math.sqrt((c*c)+(r*r))
-            if(WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] == (-1) or WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] == 0):
-                WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass))))][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass))))] = 1
+                                WallSplashMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i*0.1*AngCos)) + c][round(Poser.RobotPositionY+(i*0.1*AngSin)) + r] -= 1
+                            elif(math.sqrt((c*c)+(r*r)) <= 15 and WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i*0.1*AngCos)) + c][round(Poser.RobotPositionY+(i*0.1*AngSin)) + r] >= 15-math.sqrt((c*c)+(r*r))):
+                                WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(i*0.1*AngCos)) + c][round(Poser.RobotPositionY+(i*0.1*AngSin)) + r] -= 15-math.sqrt((c*c)+(r*r))
+            if(WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle]*0.1*AngCos))][round(Poser.RobotPositionY+(lidardata[angle]*0.1*AngSin))] == (-1) or WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle]*0.1*AngCos))][round(Poser.RobotPositionY+(lidardata[angle]*0.1*AngSin))] == 0):
+                WallMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle]*0.1*AngCos))][round(Poser.RobotPositionY+(lidardata[angle]*0.1*AngSin))] = 1
                 for c in range(-15, 15):
                     for r in range(-15, 15):
                         if(math.sqrt((c*c)+(r*r)) <= 9):
-                            WallSplashMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] += 1
+                            WallSplashMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle]*0.1*AngCos)) + c][round(Poser.RobotPositionY+(lidardata[angle]*0.1*AngSin)) + r] += 1
                         elif(math.sqrt((c*c)+(r*r)) <= 15):
-                            WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle] * 0.1 * math.cos(math.radians(angle+180+Poser.RobotCompass)))) + c][round(Poser.RobotPositionY+(lidardata[angle] * 0.1 * math.sin(math.radians(angle+180+Poser.RobotCompass)))) + r] += 15-math.sqrt((c*c)+(r*r))
+                            WallWeightMap[Poser.CurrentFloor][round(Poser.RobotPositionX+(lidardata[angle]*0.1*AngCos)) + c][round(Poser.RobotPositionY+(lidardata[angle]*0.1*AngSin)) + r] += 15-math.sqrt((c*c)+(r*r))
 
 def PlotPresence():
     for c in range(-15, 15):

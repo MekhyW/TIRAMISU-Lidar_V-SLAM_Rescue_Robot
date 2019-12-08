@@ -5,8 +5,7 @@ import math
 import serial
 import Poser
 import Topographer
-import PathPlanner
-import Navigator
+import MotionPlanner
 import Signalizer
 Serial = serial.Serial('/dev/ttyS0', 115200)
 

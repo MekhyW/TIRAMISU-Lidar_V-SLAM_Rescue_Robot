@@ -35,6 +35,7 @@ def GetRobotPose():
             data = pose.get_pose_data()
             RobotPoseFrame = pose.frame_number
             RobotInclination, RobotCompass, RobotTilt = quaternion_to_euler(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w)
+            RobotCompass += 180
             RobotPositionX = (data.translation.x * 100) - (9.5 * math.cos(math.radians(RobotCompass))) + 500
             RobotPositionY = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(RobotCompass))) + 500
             if data.translation.y * 100 > 30:
