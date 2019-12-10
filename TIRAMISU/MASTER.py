@@ -1,6 +1,5 @@
 #TIRAMISU Robot - MASTER.py
 #Version: 1.0
-import numpy
 import math
 import serial
 import Poser

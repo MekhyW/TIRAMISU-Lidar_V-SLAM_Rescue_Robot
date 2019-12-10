@@ -8,18 +8,13 @@ ExistentNodeMap = [[0]*1000]*1000
 SearchDone = False
 
 class Node:
-    def __init__(self, PositionX, PositionY):
-        ExistentNodeMap[PositionX][PositionY] = 1
+    def __init__(self, PositionX, PositionY, PreviousNode):
         self.PositionX = PositionX
         self.PositionY = PositionY
-        self.PreviousNode = None
-        self.UpdateGraphDist()
-    def UpdateGraphDist(self):
-        if(Topographer.WallMap[Poser.CurrentFloor][self.PositionX][self.PositionY]==1 or Topographer.WallSplashMap[Poser.CurrentFloor][self.PositionX][self.PositionY]>0 or Topographer.LandmarkMap[Poser.CurrentFloor][self.PositionX][self.PositionY]==99):
-            self.GraphDistance = math.inf
-        else:
-            self.EuclideanDistance = math.sqrt(math.pow((self.PositionX - Poser.RobotPositionX), 2) + math.pow((self.PositionY - Poser.RobotPositionY), 2))
-            self.GraphDistance = self.EuclideanDistance + Topographer.EdgeWeightMap[Poser.CurrentFloor][self.PositionX][self.PositionY]
+        self.PreviousNode = PreviousNode
+        self.EuclideanDistance = math.sqrt(math.pow((self.PositionX - Poser.RobotPositionX), 2) + math.pow((self.PositionY - Poser.RobotPositionY), 2))
+        self.GraphDistance = self.EuclideanDistance + Topographer.EdgeWeightMap[Poser.CurrentFloor][self.PositionX][self.PositionY]
+        ExistentNodeMap[self.PositionX][self.PositionY] = 1
     def Visit(self):
         UnvisitedNodeList.remove(self)
         VisitedNodeList.append(self)
@@ -28,28 +23,26 @@ class Node:
         for c in range(-1, 2):
             for r in range(-1, 2):
                 if(ExistentNodeMap[self.PositionX+c][self.PositionY+r]==0 and Topographer.WallMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]==0 and Topographer.WallSplashMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]<=0 and Topographer.LandmarkMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]!=99):
-                    node = Node(self.PositionX+c, self.PositionY+r)
+                    node = Node(self.PositionX+c, self.PositionY+r, self)
                     UnvisitedNodeList.append(node)
     def __eq__(self, other): 
         return self.__dict__ == other.__dict__
                     
 
-#still doesn´t output anything useful, just performs the iterations
 def PlanPath():
     SearchDone = False
-    if not UnvisitedNodeList:
-        startnode = Node(Poser.RobotPositionX, Poser.RobotPositionY)
-        UnvisitedNodeList.append(startnode)
-        startnode.Visit()
-    for x in UnvisitedNodeList:
-        x.UpdateGraphDist()
-        x.PreviousNode = None
-    PreviousNode = None
+    startnode = Node(Poser.RobotPositionX, Poser.RobotPositionY, None)
+    UnvisitedNodeList.append(startnode)
+    startnode.Visit()
     while(SearchDone == False and UnvisitedNodeList == True):
         UnvisitedNodeList.sort(key=operator.attrgetter('GraphDistance'))
-        UnvisitedNodeList[0].PreviousNode = PreviousNode
         UnvisitedNodeList[0].Visit()
-        PreviousNode = UnvisitedNodeList[0]
+    #backtrace path to obtain target angle
     for x in VisitedNodeList:
-        UnvisitedNodeList.append(x)
-    VisitedNodeList.clear()
+        ExistentNodeMap[x.PositionX][x.PositionY] = 0
+        VisitedNodeList.remove(x)
+        del x
+    for x in UnvisitedNodeList:
+        ExistentNodeMap[x.PositionX][x.PositionY] = 0
+        UnvisitedNodeList.remove(x)
+        del x
