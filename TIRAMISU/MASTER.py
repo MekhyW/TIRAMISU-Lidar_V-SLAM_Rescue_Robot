@@ -14,6 +14,7 @@ while True:
     Poser.GetRobotPose()
     Topographer.PlotPresence()
     Topographer.PlotWalls()
+    MotionPlanner.PlanPath()
     if(Serial.in_waiting):
         while(Serial.in_waiting):
             Command = Serial.readline()

@@ -25,33 +25,33 @@ ExitSprite = pygame.image.load('Exit.png')
 
 def GraphicsRefresh():
     LandmarkPositionList.clear()
-    for c in range(-100, 100):
-        for r in range(-60, 60):
+    for c in range(-100, 101):
+        for r in range(-60, 61):
             if(Topographer.LandmarkMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] > 0 and Topographer.LandmarkMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] <= 7):
                 LandmarkPositionList.append(((4*c)+400-25, (4*r)+240-25))
             elif(Topographer.WallMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] == 1):
-                for a in range(0, 4):
-                    for b in range(0, 4):
+                for a in range(0, 5):
+                    for b in range(0, 5):
                         OnScreenPalette[(4*c)+a+400][(4*r)+b+240] = colour_lethalwall
             elif(Topographer.LandmarkMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] == 99):
-                for a in range(0, 4):
-                    for b in range(0, 4):
+                for a in range(0, 5):
+                    for b in range(0, 5):
                         OnScreenPalette[(4*c)+a+400][(4*r)+b+240] = colour_blacktile
             elif(Topographer.PresenceMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] == 1):
-                for a in range(0, 4):
-                    for b in range(0, 4):
+                for a in range(0, 5):
+                    for b in range(0, 5):
                         OnScreenPalette[(4*c)+a+400][(4*r)+b+240] = colour_presence
             elif(Topographer.WallSplashMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] > 0):
-                for a in range(0, 4):
-                    for b in range(0, 4):
+                for a in range(0, 5):
+                    for b in range(0, 5):
                         OnScreenPalette[(4*c)+a+400][(4*r)+b+240] = colour_splashwall
             elif(Topographer.WallMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] == 0):
-                for a in range(0, 4):
-                    for b in range(0, 4):
+                for a in range(0, 5):
+                    for b in range(0, 5):
                         OnScreenPalette[(4*c)+a+400][(4*r)+b+240] = colour_freespace
-            elif(Topographer.WallMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] == 0):
-                for a in range(0, 4):
-                    for b in range(0, 4):
+            elif(Topographer.WallMap[Poser.CurrentFloor][Poser.RobotPositionX + c][Poser.RobotPositionY + r] == -1):
+                for a in range(0, 5):
+                    for b in range(0, 5):
                         OnScreenPalette[(4*c)+a+400][(4*r)+b+240] = colour_unknown
     for i in LandmarkPositionList:
         Display.blit(VictimSprite, i)
@@ -63,7 +63,7 @@ def GraphicsRefresh():
 
 
 def SignalizeVictim(VictimType):
-    for second in range(1, 10):
+    for second in range(1, 11):
         Display.fill((0, 0, 0))
         time.sleep(0.5)
         print('\a')
