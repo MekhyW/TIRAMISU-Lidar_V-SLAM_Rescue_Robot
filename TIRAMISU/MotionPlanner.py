@@ -6,6 +6,7 @@ UnvisitedNodeList = []
 VisitedNodeList = []
 ExistentNodeMap = [[0]*1000]*1000
 SearchDone = False
+RobotAngleError = 0
 
 class Node:
     def __init__(self, PositionX, PositionY, PreviousNode):
@@ -20,11 +21,26 @@ class Node:
         VisitedNodeList.append(self)
         if(Topographer.PresenceMap[Poser.CurrentFloor][self.PositionX][self.PositionY]==0 and 0 < Topographer.EdgeWeightMap[Poser.CurrentFloor][self.PositionX][self.PositionY] < 3):
             SearchDone = True
+            self.BacktracePath()
+        elif(self.PositionX==500 and self.PositionY==500):
+            self.BacktracePath()
         for c in range(-1, 2):
             for r in range(-1, 2):
                 if(ExistentNodeMap[self.PositionX+c][self.PositionY+r]==0 and Topographer.WallMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]==0 and Topographer.WallSplashMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]<=0 and Topographer.LandmarkMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]!=99):
                     node = Node(self.PositionX+c, self.PositionY+r, self)
                     UnvisitedNodeList.append(node)
+    def BacktracePath(self):
+        if(round(self.EuclideanDistance) <= 10):
+            if(Poser.RobotCompass > 180):
+                RobotAngleError = (-1)*(math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - (Poser.RobotCompass-360)))
+            else:
+                RobotAngleError = (-1)*(math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - Poser.RobotCompass))
+            if(RobotAngleError >= 360):
+                RobotAngleError -= 360
+            elif(RobotAngleError <= -360):
+                RobotAngleError += 360
+        else:
+            self.PreviousNode.BacktracePath()
     def __eq__(self, other): 
         return self.__dict__ == other.__dict__
                     
@@ -37,7 +53,6 @@ def PlanPath():
     while(SearchDone == False and UnvisitedNodeList == True):
         UnvisitedNodeList.sort(key=operator.attrgetter('GraphDistance'))
         UnvisitedNodeList[0].Visit()
-    #backtrace path to obtain target angle
     for x in VisitedNodeList:
         ExistentNodeMap[x.PositionX][x.PositionY] = 0
         VisitedNodeList.remove(x)
@@ -46,3 +61,7 @@ def PlanPath():
         ExistentNodeMap[x.PositionX][x.PositionY] = 0
         UnvisitedNodeList.remove(x)
         del x
+
+
+def SetVelocity():
+    pass

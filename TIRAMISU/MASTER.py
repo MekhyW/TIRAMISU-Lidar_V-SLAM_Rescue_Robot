@@ -14,6 +14,7 @@ while True:
     Topographer.PlotPresence()
     Topographer.PlotWalls()
     MotionPlanner.PlanPath()
+    MotionPlanner.SetVelocity()
     if(Serial.in_waiting):
         while(Serial.in_waiting):
             Command = Serial.readline()
