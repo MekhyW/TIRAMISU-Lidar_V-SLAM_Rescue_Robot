@@ -1,5 +1,4 @@
-//TIRAMISU Robot - Slave
-//Version: 1.0
+//TIRAMISU Robot - SLAVE
 #include <Wire.h>
 #include <string>
 #include "OpenMVH7.h"
@@ -57,13 +56,15 @@ void loop() {
       } else if(Command=="AVOIDRIGHT"){
         AvoidRight();
       } else if(OnBlackTile==false){
-        if(Command==0){
+        if(Command.toInt()==0){
           SpeedLeft = 0;
           SpeedRight = 0;
-        } else if(Command>0 && Command<=255){
-          SpeedLeft = Command; 
-        } else if(Command>255 && Command<=510){
-          SpeedRight = Command-255;
+        } else if((Command.toInt()>0 && Command.toInt()<=255) || (Command.toInt()<0 && Command.toInt()>=(-255))){
+          SpeedLeft = Command.toInt(); 
+        } else if(Command.toInt()>255 && Command.toInt()<=510){
+          SpeedRight = Command.toInt()-255;
+        } else if(Command.toInt()<(-255) && Command.toInt()>=(-510)){
+          SpeedRight = Command.toInt()+255;
         }
         Move(SpeedLeft, SpeedRight);
       }

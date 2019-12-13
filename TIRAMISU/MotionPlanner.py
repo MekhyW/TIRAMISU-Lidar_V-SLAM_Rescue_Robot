@@ -7,6 +7,7 @@ VisitedNodeList = []
 ExistentNodeMap = [[0]*1000]*1000
 SearchDone = False
 RobotAngleError = 0
+Kp = 3
 
 class Node:
     def __init__(self, PositionX, PositionY, PreviousNode):
@@ -34,9 +35,9 @@ class Node:
         if(round(self.EuclideanDistance) <= 10):
             global RobotAngleError
             if(Poser.RobotCompass > 180):
-                RobotAngleError = (-1)*(math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - (Poser.RobotCompass-360)))
+                RobotAngleError = math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - (Poser.RobotCompass-360))
             else:
-                RobotAngleError = (-1)*(math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - Poser.RobotCompass))
+                RobotAngleError = math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - Poser.RobotCompass)
             if(RobotAngleError >= 360):
                 RobotAngleError -= 360
             elif(RobotAngleError <= -360):
@@ -65,5 +66,15 @@ def PlanPath():
         del x
 
 
+def constrain(val, min_val, max_val):
+    return min(max_val, max(min_val, val))
+
 def SetVelocity():
-    pass
+    if(RobotAngleError > 30):
+        return -200, 455
+    elif(RobotAngleError < -30):
+        return 200, -455
+    else:
+        pwmL = constrain(200-(RobotAngleError*Kp), 1, 250)
+        pwmR = constrain(455+(RobotAngleError*Kp), 256, 505)
+        return pwmL, pwmR

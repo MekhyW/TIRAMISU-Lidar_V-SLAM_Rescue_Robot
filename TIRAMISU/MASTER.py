@@ -1,5 +1,4 @@
-#TIRAMISU Robot - MASTER.py
-#Version: 1.0
+#TIRAMISU Robot - MASTER
 import math
 import serial
 import Poser
@@ -14,7 +13,9 @@ while True:
     Topographer.PlotPresence()
     Topographer.PlotWalls()
     MotionPlanner.PlanPath()
-    MotionPlanner.SetVelocity()
+    pwmL, pwmR = MotionPlanner.SetVelocity()
+    Serial.write(pwmL)
+    Serial.write(pwmR)
     if(Serial.in_waiting):
         while(Serial.in_waiting):
             Command = Serial.readline()
