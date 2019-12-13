@@ -20,6 +20,7 @@ class Node:
         UnvisitedNodeList.remove(self)
         VisitedNodeList.append(self)
         if(Topographer.PresenceMap[Poser.CurrentFloor][self.PositionX][self.PositionY]==0 and 0 < Topographer.EdgeWeightMap[Poser.CurrentFloor][self.PositionX][self.PositionY] < 3):
+            global SearchDone
             SearchDone = True
             self.BacktracePath()
         elif(self.PositionX==500 and self.PositionY==500):
@@ -31,6 +32,7 @@ class Node:
                     UnvisitedNodeList.append(node)
     def BacktracePath(self):
         if(round(self.EuclideanDistance) <= 10):
+            global RobotAngleError
             if(Poser.RobotCompass > 180):
                 RobotAngleError = (-1)*(math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - (Poser.RobotCompass-360)))
             else:

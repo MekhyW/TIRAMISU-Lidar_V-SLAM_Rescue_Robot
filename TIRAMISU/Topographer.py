@@ -12,6 +12,8 @@ EdgeWeightMap = [[[0]*3]*1000]*1000
 SweeperGenerator = None
 
 def SweeperOn(state):
+    global SweeperIsOn
+    global SweeperGenerator
     if state==True:
         SweeperGenerator = Sweeper.StartScanning()
         SweeperIsOn = True
