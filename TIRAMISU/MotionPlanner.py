@@ -1,23 +1,23 @@
-import Poser
-import Topographer
 import math
 import operator
-UnvisitedNodeList = []
-VisitedNodeList = []
-ExistentNodeMap = [[0]*1000]*1000
-SearchDone = False
-MazeFinished = False
-RobotAngleError = 0
-Kp = 3
+import Poser
+import Topographer
+UNVISITED_NODE_LIST = []
+VISITED_NODE_LIST = []
+EXISTENT_NODE_MAP = [[0]*1000]*1000
+SEARCH_DONE = False
+MAZE_FINISHED = False
+ROBOT_ANGLE_ERROR = 0
+
 
 def GetAngleError(currentAngle, currentX, currentY, targetX, targetY):
-    if(currentAngle > 180):
+    if currentAngle > 180:
         result = math.degrees(math.atan2(targetY-currentY, targetX-currentX) - (currentAngle-360))
     else:
         result = math.degrees(math.atan2(targetY-currentY, targetX-currentX) - currentAngle)
-    if(result >= 360):
+    if result >= 360:
         result -= 360
-    elif(result <= -360):
+    elif result <= -360:
         result += 360
     return result
 
@@ -27,27 +27,27 @@ class Node:
         self.PositionX = PositionX
         self.PositionY = PositionY
         self.PreviousNode = PreviousNode
-        self.EuclideanDistance = math.sqrt(math.pow((self.PositionX - Poser.RobotPositionX), 2) + math.pow((self.PositionY - Poser.RobotPositionY), 2))
-        self.GraphDistance = self.EuclideanDistance + Topographer.EdgeWeightMap[Poser.CurrentFloor][self.PositionX][self.PositionY]
-        ExistentNodeMap[self.PositionX][self.PositionY] = 1
+        self.EuclideanDistance = math.sqrt(math.pow((self.PositionX - Poser.ROBOT_POSITION_X), 2) + math.pow((self.PositionY - Poser.ROBOT_POSITION_Y), 2))
+        self.GraphDistance = self.EuclideanDistance + Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.PositionX][self.PositionY]
+        EXISTENT_NODE_MAP[self.PositionX][self.PositionY] = 1
     def Visit(self):
-        UnvisitedNodeList.remove(self)
-        VisitedNodeList.append(self)
-        if(Topographer.PresenceMap[Poser.CurrentFloor][self.PositionX][self.PositionY]==0 and 0 < Topographer.EdgeWeightMap[Poser.CurrentFloor][self.PositionX][self.PositionY] < 3):
-            global SearchDone
-            SearchDone = True
+        UNVISITED_NODE_LIST.remove(self)
+        VISITED_NODE_LIST.append(self)
+        if(Topographer.PRESENCE_MAP[Poser.CURRENT_FLOOR][self.PositionX][self.PositionY] == 0 and 0 < Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.PositionX][self.PositionY] < 3):
+            global SEARCH_DONE
+            SEARCH_DONE = True
             self.BacktracePath()
         elif(self.PositionX==500 and self.PositionY==500):
             self.BacktracePath()
         for c in range(-1, 2):
             for r in range(-1, 2):
-                if(ExistentNodeMap[self.PositionX+c][self.PositionY+r]==0 and Topographer.WallMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]==0 and Topographer.WallSplashMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]<=0 and Topographer.LandmarkMap[Poser.CurrentFloor][self.PositionX+c][self.PositionY+r]!=99):
+                if(EXISTENT_NODE_MAP[self.PositionX+c][self.PositionY+r] == 0 and Topographer.WALL_MAP[Poser.CURRENT_FLOOR][self.PositionX+c][self.PositionY+r]==0 and Topographer.WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][self.PositionX+c][self.PositionY+r]<=0 and Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][self.PositionX+c][self.PositionY+r] != 99):
                     node = Node(self.PositionX+c, self.PositionY+r, self)
-                    UnvisitedNodeList.append(node)
+                    UNVISITED_NODE_LIST.append(node)
     def BacktracePath(self):
-        if(round(self.EuclideanDistance) <= 10):
-            global RobotAngleError
-            RobotAngleError = GetAngleError(Poser.RobotCompass, Poser.RobotPositionX, Poser.RobotPositionY, self.PositionX, self.PositionY)
+        if round(self.EuclideanDistance) <= 10:
+            global ROBOT_ANGLE_ERROR
+            ROBOT_ANGLE_ERROR = GetAngleError(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, self.PositionX, self.PositionY)
         else:
             self.PreviousNode.BacktracePath()
     def __eq__(self, other): 
@@ -55,26 +55,27 @@ class Node:
                     
 
 def PlanPath():
-    SearchDone = False
-    startnode = Node(Poser.RobotPositionX, Poser.RobotPositionY, None)
-    UnvisitedNodeList.append(startnode)
+    global SEARCH_DONE
+    SEARCH_DONE = False
+    startnode = Node(Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, None)
+    UNVISITED_NODE_LIST.append(startnode)
     startnode.Visit()
-    while(SearchDone == False and UnvisitedNodeList == True):
-        UnvisitedNodeList.sort(key=operator.attrgetter('GraphDistance'))
-        UnvisitedNodeList[0].Visit()
-    if(UnvisitedNodeList == False):
-        global MazeFinished
-        MazeFinished = True
+    while (not SEARCH_DONE) and (UNVISITED_NODE_LIST):
+        UNVISITED_NODE_LIST.sort(key=operator.attrgetter('GraphDistance'))
+        UNVISITED_NODE_LIST[0].Visit()
+    if not UNVISITED_NODE_LIST:
+        global MAZE_FINISHED
+        MAZE_FINISHED = True
     else:
-        global MazeFinished
-        MazeFinished = False
-    for x in VisitedNodeList:
-        ExistentNodeMap[x.PositionX][x.PositionY] = 0
-        VisitedNodeList.remove(x)
+        global MAZE_FINISHED
+        MAZE_FINISHED = False
+    for x in VISITED_NODE_LIST:
+        EXISTENT_NODE_MAP[x.PositionX][x.PositionY] = 0
+        VISITED_NODE_LIST.remove(x)
         del x
-    for x in UnvisitedNodeList:
-        ExistentNodeMap[x.PositionX][x.PositionY] = 0
-        UnvisitedNodeList.remove(x)
+    for x in UNVISITED_NODE_LIST:
+        EXISTENT_NODE_MAP[x.PositionX][x.PositionY] = 0
+        UNVISITED_NODE_LIST.remove(x)
         del x
 
 
@@ -82,11 +83,12 @@ def constrain(val, min_val, max_val):
     return min(max_val, max(min_val, val))
 
 def SetVelocity():
-    if(RobotAngleError > 30):
+    kp = 3
+    if ROBOT_ANGLE_ERROR > 30:
         return -200, 455
-    elif(RobotAngleError < -30):
+    elif ROBOT_ANGLE_ERROR < -30:
         return 200, -455
     else:
-        pwmL = constrain(200-(RobotAngleError*Kp), 1, 250)
-        pwmR = constrain(455+(RobotAngleError*Kp), 256, 505)
+        pwmL = constrain(round(200-(ROBOT_ANGLE_ERROR*kp)), 1, 250)
+        pwmR = constrain(round(455+(ROBOT_ANGLE_ERROR*kp)), 256, 505)
         return pwmL, pwmR

@@ -1,15 +1,17 @@
-import pyrealsense2 as rs
 import math
+import pyrealsense2 as rs
+import Topographer
 pipe = rs.pipeline()
 cfg = rs.config()
 cfg.enable_stream(rs.stream.pose)
 pipe.start(cfg)
-CurrentFloor = 1
-RobotPositionX = 500
-RobotPositionY = 500
-RobotInclination = 0
-RobotCompass = 0
-RobotTilt = 0
+CURRENT_FLOOR = 1
+CURRENT_FLOOR_LAST = 1
+ROBOT_POSITION_X = 500
+ROBOT_POSITION_Y = 500
+ROBOT_INCLINATION = 0
+ROBOT_COMPASS = 0
+ROBOT_TILT = 0
 
 
 def quaternion_to_euler(x, y, z, w):
@@ -33,16 +35,20 @@ def GetRobotPose():
         pose = frames.get_pose_frame()
         if pose:
             data = pose.get_pose_data()
-            RobotPoseFrame = pose.frame_number
-            RobotInclination, RobotCompass, RobotTilt = quaternion_to_euler(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w)
-            RobotCompass += 180
-            RobotPositionX = (data.translation.x * 100) - (9.5 * math.cos(math.radians(RobotCompass))) + 500
-            RobotPositionY = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(RobotCompass))) + 500
+            global ROBOT_INCLINATION, ROBOT_COMPASS, ROBOT_TILT, CURRENT_FLOOR, ROBOT_POSITION_X, ROBOT_POSITION_Y
+            ROBOT_INCLINATION, ROBOT_COMPASS, ROBOT_TILT = quaternion_to_euler(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w)
+            ROBOT_COMPASS += 180
+            ROBOT_POSITION_X = (data.translation.x * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 500
+            ROBOT_POSITION_Y = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(ROBOT_COMPASS))) + 500
+            CURRENT_FLOOR_LAST = CURRENT_FLOOR
             if data.translation.y * 100 > 30:
-                CurrentFloor = 2
+                CURRENT_FLOOR = 2
             elif data.translation.y * 100 < (-30):
-                CurrentFloor = 0
+                CURRENT_FLOOR = 0
             else:
-                CurrentFloor = 1
+                CURRENT_FLOOR = 1
+            if CURRENT_FLOOR_LAST != CURRENT_FLOOR:
+                Topographer.PlotBlackTile(CURRENT_FLOOR_LAST)
     finally:
         pipe.stop()
+        
