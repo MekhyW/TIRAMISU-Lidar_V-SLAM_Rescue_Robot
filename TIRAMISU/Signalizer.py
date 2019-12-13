@@ -53,8 +53,8 @@ def GraphicsRefresh():
                 for a in range(0, 5):
                     for b in range(0, 5):
                         OnScreenPalette[(4*c)+a+400][(4*r)+b+240] = colour_unknown
-    for i in LandmarkPositionList:
-        Display.blit(VictimSprite, i)
+    for l in LandmarkPositionList:
+        Display.blit(VictimSprite, l)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()

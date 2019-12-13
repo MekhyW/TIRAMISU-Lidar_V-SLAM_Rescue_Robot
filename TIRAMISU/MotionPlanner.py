@@ -6,8 +6,21 @@ UnvisitedNodeList = []
 VisitedNodeList = []
 ExistentNodeMap = [[0]*1000]*1000
 SearchDone = False
+MazeFinished = False
 RobotAngleError = 0
 Kp = 3
+
+def GetAngleError(currentAngle, currentX, currentY, targetX, targetY):
+    if(currentAngle > 180):
+        result = math.degrees(math.atan2(targetY-currentY, targetX-currentX) - (currentAngle-360))
+    else:
+        result = math.degrees(math.atan2(targetY-currentY, targetX-currentX) - currentAngle)
+    if(result >= 360):
+        result -= 360
+    elif(result <= -360):
+        result += 360
+    return result
+
 
 class Node:
     def __init__(self, PositionX, PositionY, PreviousNode):
@@ -34,14 +47,7 @@ class Node:
     def BacktracePath(self):
         if(round(self.EuclideanDistance) <= 10):
             global RobotAngleError
-            if(Poser.RobotCompass > 180):
-                RobotAngleError = math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - (Poser.RobotCompass-360))
-            else:
-                RobotAngleError = math.degrees(math.atan2(self.PositionY-Poser.RobotPositionY, self.PositionX-Poser.RobotPositionX) - Poser.RobotCompass)
-            if(RobotAngleError >= 360):
-                RobotAngleError -= 360
-            elif(RobotAngleError <= -360):
-                RobotAngleError += 360
+            RobotAngleError = GetAngleError(Poser.RobotCompass, Poser.RobotPositionX, Poser.RobotPositionY, self.PositionX, self.PositionY)
         else:
             self.PreviousNode.BacktracePath()
     def __eq__(self, other): 
@@ -56,6 +62,12 @@ def PlanPath():
     while(SearchDone == False and UnvisitedNodeList == True):
         UnvisitedNodeList.sort(key=operator.attrgetter('GraphDistance'))
         UnvisitedNodeList[0].Visit()
+    if(UnvisitedNodeList == False):
+        global MazeFinished
+        MazeFinished = True
+    else:
+        global MazeFinished
+        MazeFinished = False
     for x in VisitedNodeList:
         ExistentNodeMap[x.PositionX][x.PositionY] = 0
         VisitedNodeList.remove(x)
