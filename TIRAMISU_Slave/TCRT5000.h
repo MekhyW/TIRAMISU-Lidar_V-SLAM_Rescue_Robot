@@ -8,7 +8,7 @@ void TCRT5000Initialize() {
 }
 
 void ReadReflection() {
-  	Reflect = (analogRead(ReflectionBPin) * 0.5) + (Reflect * 0.5);
+  	Reflect = (analogRead(ReflectionPin) * 0.5) + (Reflect * 0.5);
 	OnBlackTile = false;
 	if (Reflect >= TrapLimit) {
 		OnBlackTile = true;

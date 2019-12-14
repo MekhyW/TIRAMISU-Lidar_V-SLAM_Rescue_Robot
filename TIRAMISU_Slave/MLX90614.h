@@ -155,11 +155,11 @@ void ReadTemperature() {
 	Victim = false;
 	if (TemperatureL >= (AtmosphereL + VHeatThreshold)) {
 		Victim = true;
-		VictimType = 1;
+		victim_type = 1;
 	}
 	if (TemperatureR >= (AtmosphereR + VHeatThreshold)) {
 		Victim = true;
-		VictimType = 8;
+		victim_type = 8;
 	}
 }
 

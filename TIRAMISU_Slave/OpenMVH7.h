@@ -8,7 +8,7 @@
 int MVLeftChar = 0;
 int MVRightChar = 0;
 bool Victim = false;
-int VictimType = 1; //(1)or(8)=heated, (2)or(9)=H, (3)or(10)=S, (4)or(11)=U, (5)or(12)=Red, (6)or(13)=Yellow, (7)or(14)=Green
+int victim_type = 1; //(1)or(8)=heated, (2)or(9)=H, (3)or(10)=S, (4)or(11)=U, (5)or(12)=Red, (6)or(13)=Yellow, (7)or(14)=Green
 
 void OpenMVSerialInitialize() {
 	Serial1.begin(9600);
@@ -26,40 +26,40 @@ void ReadCams() {
 	if (MVLeftChar == Decode_H || MVLeftChar == Decode_S || MVLeftChar == Decode_U || MVLeftChar == Decode_Red || MVLeftChar == Decode_Yellow || MVLeftChar == Decode_Green || MVRightChar == Decode_H || MVRightChar == Decode_S || MVRightChar == Decode_U || MVRightChar == Decode_Red || MVRightChar == Decode_Yellow || MVRightChar == Decode_Green) {
 		Victim = true;
 		if (MVLeftChar == Decode_H) {
-			VictimType = 2;
+			victim_type = 2;
 		}
 		else if (MVLeftChar == Decode_S) {
-			VictimType = 3;
+			victim_type = 3;
 		}
 		else if (MVLeftChar == Decode_U) {
-			VictimType = 4;
+			victim_type = 4;
 		}
 		else if (MVLeftChar == Decode_Red) {
-			VictimType = 5;
+			victim_type = 5;
 		}
 		else if (MVLeftChar == Decode_Yellow) {
-			VictimType = 6;
+			victim_type = 6;
 		}
 		else if (MVLeftChar == Decode_Green) {
-			VictimType = 7;
+			victim_type = 7;
 		}
 		if (MVRightChar == Decode_H) {
-			VictimType = 9;
+			victim_type = 9;
 		}
 		else if (MVRightChar == Decode_S) {
-			VictimType = 10;
+			victim_type = 10;
 		}
 		else if (MVRightChar == Decode_U) {
-			VictimType = 11;
+			victim_type = 11;
 		}
 		else if (MVRightChar == Decode_Red) {
-			VictimType = 12;
+			victim_type = 12;
 		}
 		else if (MVRightChar == Decode_Yellow) {
-			VictimType = 13;
+			victim_type = 13;
 		}
 		else if (MVRightChar == Decode_Green) {
-			VictimType = 14;
+			victim_type = 14;
 		}
 	}
 }

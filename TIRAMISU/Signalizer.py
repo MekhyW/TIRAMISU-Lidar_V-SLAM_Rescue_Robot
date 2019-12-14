@@ -23,7 +23,7 @@ BLINKER_YELLOW_SPRITE = pygame.image.load('BlinkerYellow.png')
 BLINKER_GREEN_SPRITE = pygame.image.load('BlinkerGreen.png')
 EXIT_SPRITE = pygame.image.load('Exit.png')
 
-def GraphicsRefresh():
+def graphics_refresh():
     LANDMARK_POSITION_LIST.clear()
     for c in range(-100, 101):
         for r in range(-60, 61):
@@ -62,28 +62,28 @@ def GraphicsRefresh():
     pygame.display.update()
 
 
-def SignalizeVictim(VictimType):
+def signalize_victim(victim_type):
     for second in range(1, 11):
         Display.fill((0, 0, 0))
         time.sleep(0.5)
         print('\a')
-        if VictimType == 1:
+        if victim_type == 1:
             Display.blit(BLINKER_HEATED_SPRITE, (0, 0))
-        elif VictimType == 2:
+        elif victim_type == 2:
             Display.blit(BLINKER_H_SPRITE, (0, 0))
-        elif VictimType == 3:
+        elif victim_type == 3:
             Display.blit(BLINKER_S_SPRITE, (0, 0))
-        elif VictimType == 4:
+        elif victim_type == 4:
             Display.blit(BLINKER_U_SPRITE, (0, 0))
-        elif VictimType == 5:
+        elif victim_type == 5:
             Display.blit(BLINKER_RED_SPRITE, (0, 0))
-        elif VictimType == 6:
+        elif victim_type == 6:
             Display.blit(BLINKER_YELLOW_SPRITE, (0, 0))
-        elif VictimType == 7:
+        elif victim_type == 7:
             Display.blit(BLINKER_GREEN_SPRITE, (0, 0))
         time.sleep(0.5)
         print('\a')
 
-def SignalizeExit():
+def signalize_exit_bonus():
     Display.blit(EXIT_SPRITE, (0, 0))
     time.sleep(10)

@@ -29,7 +29,7 @@ void loop() {
       ReadReflection();  
     }
   } else if(Victim==true){
-    Serial.println(VictimType);
+    Serial.println(victim_type);
   } else if(digitalRead(23)==LOW){
     MotorsStop();
     while(digitalRead(23)==LOW){

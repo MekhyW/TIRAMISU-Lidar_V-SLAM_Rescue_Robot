@@ -106,25 +106,25 @@ void LLBackwards() {
 }
 
 
-void Move(int pwmL, int pwmR) {
-	if (pwmL > 0) {
+void Move(int pwm_l, int pwm_r) {
+	if (pwm_l > 0) {
 		ULForward();
 		LLForward();
 	} else {
 		ULBackwards();
 		LLBackwards();
 	}
-	if (pwmR > 0) {
+	if (pwm_r > 0) {
 		URForward();
 		LRForward();
 	} else {
 		URBackwards();
 		LRBackwards();
 	}
-	analogWrite(motorUL, abs(pwmL));
-	analogWrite(motorLL, abs(pwmL));
-	analogWrite(motorUR, abs(pwmR));
-	analogWrite(motorLR, abs(pwmR));
+	analogWrite(motorUL, abs(pwm_l));
+	analogWrite(motorLL, abs(pwm_l));
+	analogWrite(motorUR, abs(pwm_r));
+	analogWrite(motorLR, abs(pwm_r));
 }
 
 void AvoidLeft() {
