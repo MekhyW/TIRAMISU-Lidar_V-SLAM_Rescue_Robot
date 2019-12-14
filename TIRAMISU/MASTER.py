@@ -39,10 +39,15 @@ while True:
     Poser.get_robot_pose()
     Topographer.plot_presence()
     Topographer.plot_walls()
-    MotionPlanner.plan_path()
-    pwm_l, pwm_r = MotionPlanner.set_velocity()
-    SERIAL.write(pwm_l)
-    SERIAL.write(pwm_r)
+    if Topographer.AVOID == 0:
+        MotionPlanner.plan_path()
+        pwm_l, pwm_r = MotionPlanner.set_velocity()
+        SERIAL.write(pwm_l)
+        SERIAL.write(pwm_r)
+    elif Topographer.AVOID == -1:
+        SERIAL.write("AVOIDLEFT")
+    elif Topographer.AVOID == 1:
+        SERIAL.write("AVOIDRIGHT")
     if SERIAL.in_waiting:
         while SERIAL.in_waiting:
             COMMAND = SERIAL.readline()

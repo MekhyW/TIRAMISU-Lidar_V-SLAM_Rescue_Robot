@@ -5,6 +5,7 @@ Sweeper = PyLidar3.YdLidarX4('COM13', 6000)
 Sweeper.Connect()
 SWEEPER_IS_ON = False
 SWEEPER_GENERATOR = None
+AVOID = 0
 LANDMARK_MAP = [[[0]*3]*1000]*1000
 PRESENCE_MAP = [[[0]*3]*1000]*1000
 WALL_MAP = [[[-1]*3]*1000]*1000
@@ -26,10 +27,16 @@ def sweeper_on(state):
 
 def plot_walls():
     lidardata = next(SWEEPER_GENERATOR)
+    global AVOID
+    AVOID = 0
     for angle in range(0, 360):
         if lidardata[angle] > 0:
-            angcos = math.cos(math.radians(angle+180+Poser.ROBOT_COMPASS))
-            angsin = math.sin(math.radians(angle+180+Poser.ROBOT_COMPASS))
+            if 15 < angle < 45 and lidardata[angle]*0.1 < 14:
+                AVOID = 1
+            elif 315 < angle < 345 and lidardata[angle]*0.1 < 14:
+                AVOID = -1
+            angcos = math.cos(math.radians(angle+Poser.ROBOT_COMPASS))
+            angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
             for i in range(0, round(lidardata[angle]*0.1)):
                 if WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == (-1):
                     WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
