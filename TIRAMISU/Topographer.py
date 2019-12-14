@@ -28,8 +28,8 @@ def plot_walls():
     lidardata = next(SWEEPER_GENERATOR)
     for angle in range(0, 360):
         if lidardata[angle] > 0:
-            angcos = math.cos(math.radians(angle+Poser.ROBOT_COMPASS))
-            angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
+            angcos = math.cos(math.radians(angle+180+Poser.ROBOT_COMPASS))
+            angsin = math.sin(math.radians(angle+180+Poser.ROBOT_COMPASS))
             for i in range(0, round(lidardata[angle]*0.1)):
                 if WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == (-1):
                     WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0

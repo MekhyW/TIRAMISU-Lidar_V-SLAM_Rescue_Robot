@@ -83,7 +83,7 @@ def constrain(val, min_val, max_val):
     return min(max_val, max(min_val, val))
 
 def set_velocity():
-    kp = 3
+    kp = 4
     if ROBOT_ANGLE_ERROR > 30:
         return -200, 455
     elif ROBOT_ANGLE_ERROR < -30:

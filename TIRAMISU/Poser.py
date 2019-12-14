@@ -37,7 +37,6 @@ def get_robot_pose():
             data = pose.get_pose_data()
             global ROBOT_INCLINATION, ROBOT_COMPASS, ROBOT_TILT, CURRENT_FLOOR, CURRENT_FLOOR_LAST, ROBOT_POSITION_X, ROBOT_POSITION_Y
             ROBOT_INCLINATION, ROBOT_COMPASS, ROBOT_TILT = quaternion_to_euler(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w)
-            ROBOT_COMPASS += 180
             ROBOT_POSITION_X = (data.translation.x * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 500
             ROBOT_POSITION_Y = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(ROBOT_COMPASS))) + 500
             CURRENT_FLOOR_LAST = CURRENT_FLOOR
