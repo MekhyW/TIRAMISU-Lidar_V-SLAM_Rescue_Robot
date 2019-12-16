@@ -9,6 +9,8 @@ SEARCH_DONE = False
 MAZE_FINISHED = False
 ROBOT_ANGLE_ERROR = 0
 
+def constrain(val, min_val, max_val):
+    return min(max_val, max(min_val, val))
 
 def get_angle_error(current_angle, current_x, current_y, target_x, target_y):
     if current_angle > 180:
@@ -47,7 +49,7 @@ class Node:
     def backtrace_path(self):
         if round(self.euclidean_distance) <= 10:
             global ROBOT_ANGLE_ERROR
-            ROBOT_ANGLE_ERROR = get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, self.position_x, self.position_y)
+            ROBOT_ANGLE_ERROR = constrain(get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, self.position_x, self.position_y), -90, 90)
         else:
             self.previous_node.backtrace_path()
     def __eq__(self, other): 
@@ -77,18 +79,3 @@ def plan_path():
         EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
         UNVISITED_NODE_LIST.remove(x)
         del x
-
-
-def constrain(val, min_val, max_val):
-    return min(max_val, max(min_val, val))
-
-def set_velocity():
-    kp = 4
-    if ROBOT_ANGLE_ERROR > 30:
-        return -200, 455
-    elif ROBOT_ANGLE_ERROR < -30:
-        return 200, -455
-    else:
-        pwm_l = constrain(round(200-(ROBOT_ANGLE_ERROR*kp)), 1, 250)
-        pwm_r = constrain(round(455+(ROBOT_ANGLE_ERROR*kp)), 256, 505)
-        return pwm_l, pwm_r

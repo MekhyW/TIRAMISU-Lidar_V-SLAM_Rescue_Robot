@@ -11,25 +11,23 @@ LAST_COMMAND = None
 
 def exit_bonus():
     for _ in range(10):
-        SERIAL.write((0+"\n").encode())
+        SERIAL.write(200)
     Signalizer.signalize_exit_bonus()
 
 def victim(victim_type):
     if not victim_type in (4, 11, 7, 14):
         while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) > 30:
-            SERIAL.write((-200+"\n").encode())
-            SERIAL.write((455+"\n").encode())
+            SERIAL.write(180)
         while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) < -30:
-            SERIAL.write((200+"\n").encode())
-            SERIAL.write((-455+"\n").encode())
+            SERIAL.write(0)
     for _ in range(10):
-        SERIAL.write(0)
+        SERIAL.write(200)
     if victim_type in (2, 9, 5, 12):
         for _ in range(10):
-            SERIAL.write("DEPLOYTWOKITS\n".encode())
+            SERIAL.write(252)
     else:
         for _ in range(10):
-            SERIAL.write("DEPLOYKIT\n".encode())
+            SERIAL.write(251)
     Signalizer.signalize_victim(victim_type)
     
 
@@ -41,25 +39,23 @@ while True:
     Topographer.plot_walls()
     if Topographer.AVOID == 0:
         MotionPlanner.plan_path()
-        pwm_l, pwm_r = MotionPlanner.set_velocity()
-        SERIAL.write((pwm_l+"\n").encode())
-        SERIAL.write((pwm_r+"\n").encode())
+        SERIAL.write(MotionPlanner.ROBOT_ANGLE_ERROR+90)
     elif Topographer.AVOID == -1:
-        SERIAL.write("AVOIDLEFT\n".encode())
+        SERIAL.write(201)
     elif Topographer.AVOID == 1:
-        SERIAL.write("AVOIDRIGHT\n".encode())
+        SERIAL.write(202)
     if SERIAL.in_waiting:
         while SERIAL.in_waiting:
-            COMMAND = SERIAL.readline().decode()
+            COMMAND = SERIAL.read()
         if COMMAND != LAST_COMMAND:
-            if COMMAND == "BLACKTILE":
+            if COMMAND == 99:
                 Topographer.plot_black_tile(Poser.CURRENT_FLOOR)
             elif 0 < int(COMMAND) <= 14:
                 if Topographer.plot_victim(int(COMMAND)):
                     victim(int(COMMAND))
-            elif COMMAND == "STANDBY" and Topographer.SWEEPER_IS_ON:
+            elif COMMAND == 20 and Topographer.SWEEPER_IS_ON:
                 Topographer.sweeper_on(False)
-            elif COMMAND == "RUNNING" and not Topographer.SWEEPER_IS_ON:
+            elif COMMAND == 21 and not Topographer.SWEEPER_IS_ON:
                 Topographer.sweeper_on(True)
         LAST_COMMAND = COMMAND
     if MotionPlanner.MAZE_FINISHED and math.sqrt(math.pow((500 - Poser.ROBOT_POSITION_X), 2) + math.pow((500 - Poser.ROBOT_POSITION_Y), 2)) < 5:
