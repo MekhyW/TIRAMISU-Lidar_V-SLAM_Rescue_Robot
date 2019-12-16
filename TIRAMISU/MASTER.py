@@ -11,25 +11,25 @@ LAST_COMMAND = None
 
 def exit_bonus():
     for _ in range(10):
-        SERIAL.write(0)
+        SERIAL.write((0+"\n").encode())
     Signalizer.signalize_exit_bonus()
 
 def victim(victim_type):
     if not victim_type in (4, 11, 7, 14):
         while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) > 30:
-            SERIAL.write(-200)
-            SERIAL.write(455)
+            SERIAL.write((-200+"\n").encode())
+            SERIAL.write((455+"\n").encode())
         while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) < -30:
-            SERIAL.write(200)
-            SERIAL.write(-455)
+            SERIAL.write((200+"\n").encode())
+            SERIAL.write((-455+"\n").encode())
     for _ in range(10):
         SERIAL.write(0)
     if victim_type in (2, 9, 5, 12):
         for _ in range(10):
-            SERIAL.write("DEPLOYTWOKITS")
+            SERIAL.write("DEPLOYTWOKITS\n".encode())
     else:
         for _ in range(10):
-            SERIAL.write("DEPLOYKIT")
+            SERIAL.write("DEPLOYKIT\n".encode())
     Signalizer.signalize_victim(victim_type)
     
 
@@ -42,15 +42,15 @@ while True:
     if Topographer.AVOID == 0:
         MotionPlanner.plan_path()
         pwm_l, pwm_r = MotionPlanner.set_velocity()
-        SERIAL.write(pwm_l)
-        SERIAL.write(pwm_r)
+        SERIAL.write((pwm_l+"\n").encode())
+        SERIAL.write((pwm_r+"\n").encode())
     elif Topographer.AVOID == -1:
-        SERIAL.write("AVOIDLEFT")
+        SERIAL.write("AVOIDLEFT\n".encode())
     elif Topographer.AVOID == 1:
-        SERIAL.write("AVOIDRIGHT")
+        SERIAL.write("AVOIDRIGHT\n".encode())
     if SERIAL.in_waiting:
         while SERIAL.in_waiting:
-            COMMAND = SERIAL.readline()
+            COMMAND = SERIAL.readline().decode()
         if COMMAND != LAST_COMMAND:
             if COMMAND == "BLACKTILE":
                 Topographer.plot_black_tile(Poser.CURRENT_FLOOR)

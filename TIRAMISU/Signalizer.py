@@ -30,28 +30,28 @@ def graphics_refresh():
             if Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] > 0 and Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] <= 7:
                 LANDMARK_POSITION_LIST.append(((4*c)+400-25, (4*r)+240-25))
             elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 1:
-                for a in range(0, 5):
-                    for b in range(0, 5):
+                for a in range(4):
+                    for b in range(4):
                         ON_SCREEN_PALETTE[(4*c)+a+400][(4*r)+b+240] = COLOUR_LETHALWALL
             elif Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 99:
-                for a in range(0, 5):
-                    for b in range(0, 5):
+                for a in range(4):
+                    for b in range(4):
                         ON_SCREEN_PALETTE[(4*c)+a+400][(4*r)+b+240] = COLOUR_BLACKTILE
             elif Topographer.PRESENCE_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 1:
-                for a in range(0, 5):
-                    for b in range(0, 5):
+                for a in range(4):
+                    for b in range(4):
                         ON_SCREEN_PALETTE[(4*c)+a+400][(4*r)+b+240] = COLOUR_PRESENCE
             elif Topographer.WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] > 0:
-                for a in range(0, 5):
-                    for b in range(0, 5):
+                for a in range(4):
+                    for b in range(4):
                         ON_SCREEN_PALETTE[(4*c)+a+400][(4*r)+b+240] = COLOUR_SPLASHWALL
             elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 0:
-                for a in range(0, 5):
-                    for b in range(0, 5):
+                for a in range(4):
+                    for b in range(4):
                         ON_SCREEN_PALETTE[(4*c)+a+400][(4*r)+b+240] = COLOUR_FREESPACE
             elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == -1:
-                for a in range(0, 5):
-                    for b in range(0, 5):
+                for a in range(4):
+                    for b in range(4):
                         ON_SCREEN_PALETTE[(4*c)+a+400][(4*r)+b+240] = COLOUR_UNKNOWN
     for l in LANDMARK_POSITION_LIST:
         Display.blit(VICTIM_SPRITE, l)

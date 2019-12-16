@@ -41,7 +41,7 @@ void loop() {
   }
   if(Serial.available()){
     while(Serial.available()){
-      Command = Serial.readString(); 
+      Command = Serial.readStringUntil('\n');
     }
     if(Command != LastCommand){
       if(Command=="STOP"){
