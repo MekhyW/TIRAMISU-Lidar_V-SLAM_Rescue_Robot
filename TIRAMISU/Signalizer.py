@@ -2,12 +2,14 @@ import time
 import pygame
 import Poser
 import Topographer
+import MotionPlanner
 pygame.init()
+COLOUR_PATH = (0, 250, 0)
 COLOUR_LETHALWALL = (0, 0, 0)
 COLOUR_BLACKTILE = (0, 0, 0)
-COLOUR_PRESENCE = (0, 0, 255)
+COLOUR_PRESENCE = (0, 0, 250)
 COLOUR_SPLASHWALL = (80, 80, 80)
-COLOUR_FREESPACE = (255, 255, 255)
+COLOUR_FREESPACE = (250, 250, 250)
 COLOUR_UNKNOWN = (100, 100, 100)
 Display = pygame.display.set_mode((800, 480))
 Display.fill(COLOUR_UNKNOWN)

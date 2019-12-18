@@ -57,6 +57,14 @@ class Node:
                     
 
 def plan_path():
+    for x in VISITED_NODE_LIST:
+        EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
+        VISITED_NODE_LIST.remove(x)
+        del x
+    for x in UNVISITED_NODE_LIST:
+        EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
+        UNVISITED_NODE_LIST.remove(x)
+        del x
     global SEARCH_DONE
     SEARCH_DONE = False
     startnode = Node(Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, None)
@@ -71,11 +79,3 @@ def plan_path():
     else:
         global MAZE_FINISHED
         MAZE_FINISHED = False
-    for x in VISITED_NODE_LIST:
-        EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
-        VISITED_NODE_LIST.remove(x)
-        del x
-    for x in UNVISITED_NODE_LIST:
-        EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
-        UNVISITED_NODE_LIST.remove(x)
-        del x
