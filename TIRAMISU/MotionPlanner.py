@@ -30,25 +30,25 @@ class Node:
         self.position_y = position_y
         self.previous_node = previous_node
         self.euclidean_distance = math.sqrt(math.pow((self.position_x - Poser.ROBOT_POSITION_X), 2) + math.pow((self.position_y - Poser.ROBOT_POSITION_Y), 2))
-        self.graph_distance = self.euclidean_distance + Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y]
+        self.graph_distance = self.euclidean_distance + Topographer.EDGE_WEIGHT_MAP[self.position_x][self.position_y][Poser.CURRENT_FLOOR]
         EXISTENT_NODE_MAP[self.position_x][self.position_y] = 1
     def visit(self):
+        global SEARCH_DONE
         UNVISITED_NODE_LIST.remove(self)
         VISITED_NODE_LIST.append(self)
-        if(Topographer.PRESENCE_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y] == 0 and 0 < Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y] < 3):
-            global SEARCH_DONE
+        if(Topographer.PRESENCE_MAP[self.position_x][self.position_y][Poser.CURRENT_FLOOR] == 0 and 0 < Topographer.EDGE_WEIGHT_MAP[self.position_x][self.position_y][Poser.CURRENT_FLOOR] < 3):
             SEARCH_DONE = True
             self.backtrace_path()
         elif(self.position_x == 500 and self.position_y == 500):
             self.backtrace_path()
         for c in range(-1, 2):
             for r in range(-1, 2):
-                if(EXISTENT_NODE_MAP[self.position_x+c][self.position_y+r] == 0 and Topographer.WALL_MAP[Poser.CURRENT_FLOOR][self.position_x+c][self.position_y+r] == 0 and Topographer.WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][self.position_x+c][self.position_y+r] <= 0 and Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][self.position_x+c][self.position_y+r] != 99):
+                if(EXISTENT_NODE_MAP[self.position_x+c][self.position_y+r] == 0 and Topographer.WALL_MAP[self.position_x+c][self.position_y+r][Poser.CURRENT_FLOOR] == 0 and Topographer.WALL_SPLASH_MAP[self.position_x+c][self.position_y+r][Poser.CURRENT_FLOOR] <= 0 and Topographer.LANDMARK_MAP[self.position_x+c][self.position_y+r][Poser.CURRENT_FLOOR] != 99):
                     node = Node(self.position_x+c, self.position_y+r, self)
                     UNVISITED_NODE_LIST.append(node)
     def backtrace_path(self):
+        global ROBOT_ANGLE_ERROR
         if round(self.euclidean_distance) <= 10:
-            global ROBOT_ANGLE_ERROR
             ROBOT_ANGLE_ERROR = constrain(get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, self.position_x, self.position_y), -90, 90)
         else:
             self.previous_node.backtrace_path()

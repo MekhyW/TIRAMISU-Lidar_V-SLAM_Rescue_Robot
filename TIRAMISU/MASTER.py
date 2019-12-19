@@ -5,7 +5,7 @@ import Poser
 import Topographer
 import MotionPlanner
 import Signalizer
-SERIAL = serial.Serial('/dev/ttyS0', 115200)
+SERIAL = serial.Serial('COM26', 115200)
 COMMAND = None
 LAST_COMMAND = None
 

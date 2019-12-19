@@ -1,7 +1,7 @@
 import math
 import PyLidar3
 import Poser
-Sweeper = PyLidar3.YdLidarX4('COM13', 6000)
+Sweeper = PyLidar3.YdLidarX4('COM6', 6000)
 Sweeper.Connect()
 SWEEPER_IS_ON = False
 SWEEPER_GENERATOR = None
@@ -38,30 +38,30 @@ def plot_walls():
             angcos = math.cos(math.radians(angle+Poser.ROBOT_COMPASS))
             angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
             for i in range(0, round(lidardata[angle]*0.1)):
-                if WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == (-1):
-                    WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
-                elif WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == 1:
-                    WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
+                if WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))][Poser.CURRENT_FLOOR] == (-1):
+                    WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))][Poser.CURRENT_FLOOR] = 0
+                elif WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))][Poser.CURRENT_FLOOR] == 1:
+                    WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))][Poser.CURRENT_FLOOR] = 0
                     for c in range(-15, 16):
                         for r in range(-15, 16):
                             if math.sqrt((c*c)+(r*r)) <= 9:
-                                WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= 1
-                            elif math.sqrt((c*c)+(r*r)) <= 15 and EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] >= 15-math.sqrt((c*c)+(r*r)):
-                                EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= 15-math.sqrt((c*c)+(r*r))
-            if WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(lidardata[angle]*0.1*angcos))][round(Poser.ROBOT_POSITION_Y+(lidardata[angle]*0.1*angsin))] in (-1, 0):
-                WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(lidardata[angle]*0.1*angcos))][round(Poser.ROBOT_POSITION_Y+(lidardata[angle]*0.1*angsin))] = 1
+                                WALL_SPLASH_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r][Poser.CURRENT_FLOOR] -= 1
+                            elif math.sqrt((c*c)+(r*r)) <= 15 and EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r][Poser.CURRENT_FLOOR] >= 15-math.sqrt((c*c)+(r*r)):
+                                EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r][Poser.CURRENT_FLOOR] -= 15-math.sqrt((c*c)+(r*r))
+            if WALL_MAP[round(Poser.ROBOT_POSITION_X+(lidardata[angle]*0.1*angcos))][round(Poser.ROBOT_POSITION_Y+(lidardata[angle]*0.1*angsin))][Poser.CURRENT_FLOOR] in (-1, 0):
+                WALL_MAP[round(Poser.ROBOT_POSITION_X+(lidardata[angle]*0.1*angcos))][round(Poser.ROBOT_POSITION_Y+(lidardata[angle]*0.1*angsin))][Poser.CURRENT_FLOOR] = 1
                 for c in range(-15, 16):
                     for r in range(-15, 16):
                         if math.sqrt((c*c)+(r*r)) <= 9:
-                            WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(lidardata[angle]*0.1*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(lidardata[angle]*0.1*angsin)) + r] += 1
+                            WALL_SPLASH_MAP[round(Poser.ROBOT_POSITION_X+(lidardata[angle]*0.1*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(lidardata[angle]*0.1*angsin)) + r][Poser.CURRENT_FLOOR] += 1
                         elif math.sqrt((c*c)+(r*r)) <= 15:
-                            EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(lidardata[angle]*0.1*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(lidardata[angle]*0.1*angsin)) + r] += 15-math.sqrt((c*c)+(r*r))
+                            EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(lidardata[angle]*0.1*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(lidardata[angle]*0.1*angsin)) + r][Poser.CURRENT_FLOOR] += 15-math.sqrt((c*c)+(r*r))
 
 
 def plot_presence():
     for c in range(-15, 16):
         for r in range(-10, 11):
-            PRESENCE_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c*math.cos(math.radians(Poser.ROBOT_COMPASS))][Poser.ROBOT_POSITION_Y + r*math.sin(math.radians(Poser.ROBOT_COMPASS))] = 1
+            PRESENCE_MAP[Poser.ROBOT_POSITION_X + c*math.cos(math.radians(Poser.ROBOT_COMPASS))][Poser.ROBOT_POSITION_Y + r*math.sin(math.radians(Poser.ROBOT_COMPASS))][Poser.CURRENT_FLOOR] = 1
 
 
 def plot_black_tile(floor):
@@ -69,7 +69,7 @@ def plot_black_tile(floor):
         for r in range(30):
             angle = math.radians(Poser.ROBOT_COMPASS) + math.atan((c-15)/(r+15))
             hipotenuse = math.sqrt(((c-15)*(c-15))+((r+15)*(r+15)))
-            LANDMARK_MAP[floor][round(Poser.ROBOT_POSITION_X + hipotenuse*math.cos(angle))][round(Poser.ROBOT_POSITION_Y + hipotenuse*math.sin(angle))] = 99
+            LANDMARK_MAP[round(Poser.ROBOT_POSITION_X + hipotenuse*math.cos(angle))][round(Poser.ROBOT_POSITION_Y + hipotenuse*math.sin(angle))][floor] = 99
 
 
 def plot_victim(victim_type):
@@ -82,16 +82,16 @@ def plot_victim(victim_type):
         angcos = math.cos(math.radians(Poser.ROBOT_COMPASS+270))
         angsin = math.sin(math.radians(Poser.ROBOT_COMPASS+270))
         for i in range(20):
-            if WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + (i * angcos))][round(Poser.ROBOT_POSITION_Y + (i * angsin))] == 1:
+            if WALL_MAP[round(Poser.ROBOT_POSITION_X + (i * angcos))][round(Poser.ROBOT_POSITION_Y + (i * angsin))][Poser.CURRENT_FLOOR] == 1:
                 wall_found_in_raytrace = True
                 wall_dist = i
                 break
         for c in range(-15, 16):
             for r in range(-15, 16):
-                if math.sqrt((c*c)+(r*r)) <= 15 and 0 < LANDMARK_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(wall_dist * angcos)+c)][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin)+r)] <= 14:
+                if math.sqrt((c*c)+(r*r)) <= 15 and 0 < LANDMARK_MAP[round(Poser.ROBOT_POSITION_X+(wall_dist * angcos)+c)][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin)+r)][Poser.CURRENT_FLOOR] <= 14:
                     victim_found_in_radius = True
         if not victim_found_in_radius and wall_found_in_raytrace:
-            LANDMARK_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))] = victim_type
+            LANDMARK_MAP[round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))][Poser.CURRENT_FLOOR] = victim_type
             VICTIM_X = round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))
             VICTIM_Y = round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))
             return True
@@ -101,16 +101,16 @@ def plot_victim(victim_type):
         angcos = math.cos(math.radians(Poser.ROBOT_COMPASS+90))
         angsin = math.sin(math.radians(Poser.ROBOT_COMPASS+90))
         for i in range(20):
-            if WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + (i * angcos))][round(Poser.ROBOT_POSITION_Y + (i * angsin))] == 1:
+            if WALL_MAP[round(Poser.ROBOT_POSITION_X + (i * angcos))][round(Poser.ROBOT_POSITION_Y + (i * angsin))][Poser.CURRENT_FLOOR] == 1:
                 wall_found_in_raytrace = True
                 wall_dist = i
                 break
         for c in range(-15, 16):
             for r in range(-15, 16):
-                if math.sqrt((c*c)+(r*r)) <= 15 and 0 < LANDMARK_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(wall_dist * angcos)+c)][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin)+r)] <= 14:
+                if math.sqrt((c*c)+(r*r)) <= 15 and 0 < LANDMARK_MAP[round(Poser.ROBOT_POSITION_X+(wall_dist * angcos)+c)][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin)+r)][Poser.CURRENT_FLOOR] <= 14:
                     victim_found_in_radius = True
         if not victim_found_in_radius and wall_found_in_raytrace:
-            LANDMARK_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))] = victim_type
+            LANDMARK_MAP[round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))][Poser.CURRENT_FLOOR] = victim_type
             VICTIM_X = round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))
             VICTIM_Y = round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))
             return True

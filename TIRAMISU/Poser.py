@@ -28,8 +28,7 @@ def quaternion_to_euler(x, y, z, w):
     return X, Y, Z
 
 
-def get_robot_pose():
-    pass
+#def get_robot_pose():
 #    pipe.start(cfg)
 #    try:
 #        frames = pipe.wait_for_frames()
