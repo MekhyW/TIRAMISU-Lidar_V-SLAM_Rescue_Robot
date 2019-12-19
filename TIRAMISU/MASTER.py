@@ -34,7 +34,7 @@ def victim(victim_type):
 
 while True:
     Signalizer.graphics_refresh()
-    Poser.get_robot_pose()
+    #Poser.get_robot_pose()
     Topographer.plot_presence()
     Topographer.plot_walls()
     if Topographer.AVOID == 0:

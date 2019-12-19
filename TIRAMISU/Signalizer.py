@@ -14,7 +14,7 @@ Display = pygame.display.set_mode((800, 480))
 Display.fill(COLOUR_UNKNOWN)
 ON_SCREEN_PALETTE = pygame.PixelArray(Display)
 LANDMARK_POSITION_LIST = [0]
-VICTIM_SPRITE = pygame.image.load('VICTIM_SPRITE.png')
+VICTIM_SPRITE = pygame.image.load('VictimSprite.png')
 BLINKER_HEATED_SPRITE = pygame.image.load('BlinkerHeated.png')
 BLINKER_H_SPRITE = pygame.image.load('BlinkerH.png')
 BLINKER_S_SPRITE = pygame.image.load('BlinkerS.png')
