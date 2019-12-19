@@ -3,7 +3,10 @@ import pygame
 import Poser
 import Topographer
 pygame.init()
-COLOUR_PATH = (0, 250, 0)
+COLOUR_RED = (255, 0, 0)
+COLOUR_YELLOW = (255, 255, 0)
+COLOUR_GREEN = (0, 255, 0)
+COLOUR_BLUE = (0, 0, 255)
 COLOUR_LETHALWALL = (0, 0, 0)
 COLOUR_BLACKTILE = (0, 0, 0)
 COLOUR_PRESENCE = (0, 0, 250)
@@ -14,15 +17,6 @@ Display = pygame.display.set_mode((800, 480))
 Display.fill(COLOUR_UNKNOWN)
 ON_SCREEN_PALETTE = pygame.PixelArray(Display)
 LANDMARK_POSITION_LIST = [0]
-VICTIM_SPRITE = pygame.image.load('VictimSprite.png')
-BLINKER_HEATED_SPRITE = pygame.image.load('BlinkerHeated.png')
-BLINKER_H_SPRITE = pygame.image.load('BlinkerH.png')
-BLINKER_S_SPRITE = pygame.image.load('BlinkerS.png')
-BLINKER_U_SPRITE = pygame.image.load('BlinkerU.png')
-BLINKER_RED_SPRITE = pygame.image.load('BlinkerRed.png')
-BLINKER_YELLOW_SPRITE = pygame.image.load('BlinkerYellow.png')
-BLINKER_GREEN_SPRITE = pygame.image.load('BlinkerGreen.png')
-EXIT_SPRITE = pygame.image.load('Exit.png')
 
 def graphics_refresh():
     LANDMARK_POSITION_LIST.clear()
@@ -50,12 +44,8 @@ def graphics_refresh():
                 for a in range(4):
                     for b in range(4):
                         ON_SCREEN_PALETTE[(4*c)+a+400][(4*r)+b+240] = COLOUR_FREESPACE
-            elif Topographer.WALL_MAP[Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r][Poser.CURRENT_FLOOR] == -1:
-                for a in range(4):
-                    for b in range(4):
-                        ON_SCREEN_PALETTE[(4*c)+a+400][(4*r)+b+240] = COLOUR_UNKNOWN
     for l in LANDMARK_POSITION_LIST:
-        Display.blit(VICTIM_SPRITE, l)
+        pygame.draw.circle(Display, COLOUR_BLUE, l, 10)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit()
@@ -68,24 +58,17 @@ def signalize_victim(victim_type):
         pygame.display.update()
         print('\a')
         time.sleep(0.5)
-        if victim_type == 1:
-            Display.blit(BLINKER_HEATED_SPRITE, (0, 0))
-        elif victim_type == 2:
-            Display.blit(BLINKER_H_SPRITE, (0, 0))
-        elif victim_type == 3:
-            Display.blit(BLINKER_S_SPRITE, (0, 0))
-        elif victim_type == 4:
-            Display.blit(BLINKER_U_SPRITE, (0, 0))
-        elif victim_type == 5:
-            Display.blit(BLINKER_RED_SPRITE, (0, 0))
-        elif victim_type == 6:
-            Display.blit(BLINKER_YELLOW_SPRITE, (0, 0))
-        elif victim_type == 7:
-            Display.blit(BLINKER_GREEN_SPRITE, (0, 0))
+        if victim_type in (1, 8, 3, 10, 6, 13):
+            Display.fill(COLOUR_YELLOW)
+        elif victim_type in (2, 9, 5, 12):
+            Display.fill(COLOUR_RED)
+        elif victim_type in (4, 11, 7, 14):
+            Display.fill(COLOUR_GREEN)
         pygame.display.update()
         print('\a')
         time.sleep(0.5)
 
 def signalize_exit_bonus():
-    Display.blit(EXIT_SPRITE, (0, 0))
+    Display.fill(COLOUR_GREEN)
+    pygame.display.update()
     time.sleep(10)

@@ -36,10 +36,11 @@ while True:
     Signalizer.graphics_refresh()
     #Poser.get_robot_pose()
     Topographer.plot_presence()
-    Topographer.plot_walls()
+    if Topographer.SWEEPER_IS_ON:
+        Topographer.plot_walls()
     if Topographer.AVOID == 0:
         MotionPlanner.plan_path()
-        SERIAL.write(MotionPlanner.ROBOT_ANGLE_ERROR+90)
+        SERIAL.write(int(MotionPlanner.ROBOT_ANGLE_ERROR+90))
     elif Topographer.AVOID == -1:
         SERIAL.write(201)
     elif Topographer.AVOID == 1:

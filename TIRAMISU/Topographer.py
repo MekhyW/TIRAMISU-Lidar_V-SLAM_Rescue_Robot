@@ -30,13 +30,13 @@ def plot_walls():
     global AVOID
     AVOID = 0
     for angle in range(0, 360):
-        if lidardata[angle] > 0:
+        angcos = math.cos(math.radians(angle+Poser.ROBOT_COMPASS))
+        angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
+        if lidardata[angle] > 0 and Poser.ROBOT_POSITION_X+(lidardata[angle]*angcos) < 1000 and Poser.ROBOT_POSITION_Y+(lidardata[angle]*angsin) < 1000:
             if 15 < angle < 45 and lidardata[angle]*0.1 < 14:
                 AVOID = 1
             elif 315 < angle < 345 and lidardata[angle]*0.1 < 14:
                 AVOID = -1
-            angcos = math.cos(math.radians(angle+Poser.ROBOT_COMPASS))
-            angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
             for i in range(0, round(lidardata[angle]*0.1)):
                 if WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))][Poser.CURRENT_FLOOR] == (-1):
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))][Poser.CURRENT_FLOOR] = 0
@@ -61,7 +61,7 @@ def plot_walls():
 def plot_presence():
     for c in range(-15, 16):
         for r in range(-10, 11):
-            PRESENCE_MAP[Poser.ROBOT_POSITION_X + c*math.cos(math.radians(Poser.ROBOT_COMPASS))][Poser.ROBOT_POSITION_Y + r*math.sin(math.radians(Poser.ROBOT_COMPASS))][Poser.CURRENT_FLOOR] = 1
+            PRESENCE_MAP[round(Poser.ROBOT_POSITION_X + c*math.cos(math.radians(Poser.ROBOT_COMPASS)))][round(Poser.ROBOT_POSITION_Y + r*math.sin(math.radians(Poser.ROBOT_COMPASS)))][Poser.CURRENT_FLOOR] = 1
 
 
 def plot_black_tile(floor):
