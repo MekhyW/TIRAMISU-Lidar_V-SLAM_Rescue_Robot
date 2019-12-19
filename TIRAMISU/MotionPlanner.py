@@ -57,6 +57,8 @@ class Node:
                     
 
 def plan_path():
+    global SEARCH_DONE
+    global MAZE_FINISHED
     for x in VISITED_NODE_LIST:
         EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
         VISITED_NODE_LIST.remove(x)
@@ -65,7 +67,6 @@ def plan_path():
         EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
         UNVISITED_NODE_LIST.remove(x)
         del x
-    global SEARCH_DONE
     SEARCH_DONE = False
     startnode = Node(Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, None)
     UNVISITED_NODE_LIST.append(startnode)
@@ -74,8 +75,6 @@ def plan_path():
         UNVISITED_NODE_LIST.sort(key=operator.attrgetter('graph_distance'))
         UNVISITED_NODE_LIST[0].visit()
     if not UNVISITED_NODE_LIST:
-        global MAZE_FINISHED
         MAZE_FINISHED = True
     else:
-        global MAZE_FINISHED
         MAZE_FINISHED = False

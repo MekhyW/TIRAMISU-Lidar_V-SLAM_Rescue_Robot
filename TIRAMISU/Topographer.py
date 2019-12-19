@@ -73,6 +73,8 @@ def plot_black_tile(floor):
 
 
 def plot_victim(victim_type):
+    global VICTIM_X
+    global VICTIM_Y
     victim_found_in_radius = False
     wall_found_in_raytrace = False
     wall_dist = 15
@@ -90,8 +92,6 @@ def plot_victim(victim_type):
                     victim_found_in_radius = True
         if not victim_found_in_radius and wall_found_in_raytrace:
             LANDMARK_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))] = victim_type
-            global VICTIM_X
-            global VICTIM_Y
             VICTIM_X = round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))
             VICTIM_Y = round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))
             return True
@@ -111,8 +111,6 @@ def plot_victim(victim_type):
                     victim_found_in_radius = True
         if not victim_found_in_radius and wall_found_in_raytrace:
             LANDMARK_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))][round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))] = victim_type
-            global VICTIM_X
-            global VICTIM_Y
             VICTIM_X = round(Poser.ROBOT_POSITION_X+(wall_dist * angcos))
             VICTIM_Y = round(Poser.ROBOT_POSITION_Y+(wall_dist * angsin))
             return True
