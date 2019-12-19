@@ -58,7 +58,6 @@ def graphics_refresh():
         Display.blit(VICTIM_SPRITE, l)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
             quit()
     pygame.display.update()
 
@@ -66,8 +65,9 @@ def graphics_refresh():
 def signalize_victim(victim_type):
     for second in range(1, 11):
         Display.fill((0, 0, 0))
-        time.sleep(0.5)
+        pygame.display.update()
         print('\a')
+        time.sleep(0.5)
         if victim_type == 1:
             Display.blit(BLINKER_HEATED_SPRITE, (0, 0))
         elif victim_type == 2:
@@ -82,8 +82,9 @@ def signalize_victim(victim_type):
             Display.blit(BLINKER_YELLOW_SPRITE, (0, 0))
         elif victim_type == 7:
             Display.blit(BLINKER_GREEN_SPRITE, (0, 0))
-        time.sleep(0.5)
+        pygame.display.update()
         print('\a')
+        time.sleep(0.5)
 
 def signalize_exit_bonus():
     Display.blit(EXIT_SPRITE, (0, 0))
