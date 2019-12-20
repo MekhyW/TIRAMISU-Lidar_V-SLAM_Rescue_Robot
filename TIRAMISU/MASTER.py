@@ -1,5 +1,4 @@
 #TIRAMISU Robot - MASTER
-import math
 import serial
 import time
 import Poser
@@ -61,6 +60,6 @@ while True:
             elif COMMAND == 21 and not Topographer.SWEEPER_IS_ON:
                 Topographer.sweeper_on(True)
         LAST_COMMAND = COMMAND
-#    if MotionPlanner.MAZE_FINISHED and math.sqrt(math.pow((500 - Poser.ROBOT_POSITION_X), 2) + math.pow((500 - Poser.ROBOT_POSITION_Y), 2)) < 5 and Topographer.SWEEPER_IS_ON:
-#        exit_bonus()
+    #if MotionPlanner.MAZE_FINISHED and math.sqrt(math.pow((500 - Poser.ROBOT_POSITION_X), 2) + math.pow((500 - Poser.ROBOT_POSITION_Y), 2)) < 5 and Topographer.SWEEPER_IS_ON:
+    #    exit_bonus()
     print(time.time() - t)
