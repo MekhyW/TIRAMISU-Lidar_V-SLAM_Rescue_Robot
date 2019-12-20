@@ -5,6 +5,7 @@ import Topographer
 UNVISITED_NODE_LIST = []
 VISITED_NODE_LIST = []
 EXISTENT_NODE_MAP = [[0 for x in range(1000)] for y in range(1000)]
+PATH_MAP = [[0 for x in range(1000)] for y in range(1000)]
 SEARCH_DONE = False
 MAZE_FINISHED = False
 ROBOT_ANGLE_ERROR = 0
@@ -48,6 +49,7 @@ class Node:
                     UNVISITED_NODE_LIST.append(node)
     def backtrace_path(self):
         global ROBOT_ANGLE_ERROR
+        PATH_MAP[self.position_x][self.position_y] = 1
         if round(self.euclidean_distance) <= 10:
             ROBOT_ANGLE_ERROR = constrain(get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, self.position_x, self.position_y), -90, 90)
         else:
@@ -60,10 +62,12 @@ def plan_path():
     global SEARCH_DONE
     global MAZE_FINISHED
     for x in VISITED_NODE_LIST:
+        PATH_MAP[x.position_x][x.position_y] = 0
         EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
         VISITED_NODE_LIST.remove(x)
         del x
     for x in UNVISITED_NODE_LIST:
+        PATH_MAP[x.position_x][x.position_y] = 0
         EXISTENT_NODE_MAP[x.position_x][x.position_y] = 0
         UNVISITED_NODE_LIST.remove(x)
         del x

@@ -1,7 +1,7 @@
 import math
-import PyLidar3
+import mypylidar3
 import Poser
-Sweeper = PyLidar3.YdLidarX4('COM6', 500)
+Sweeper = mypylidar3.YdLidarX4('COM6', 6000)
 Sweeper.Connect()
 
 #SWEEPER_IS_ON = False
@@ -33,7 +33,7 @@ def plot_walls():
     lidardata = next(SWEEPER_GENERATOR)
     global AVOID
     AVOID = 0
-    for angle in range(0, 360):
+    for angle in [x for x in range(0, 360) if x not in range(91, 270)]:
         angcos = math.cos(math.radians(angle+Poser.ROBOT_COMPASS))
         angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
         distance = (lidardata[angle] * 0.1) + 3.3

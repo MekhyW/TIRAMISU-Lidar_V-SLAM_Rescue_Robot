@@ -2,6 +2,7 @@ import time
 import pygame
 import Poser
 import Topographer
+import MotionPlanner
 pygame.init()
 COLOUR_RED = (255, 0, 0)
 COLOUR_YELLOW = (255, 255, 0)
@@ -24,6 +25,8 @@ def graphics_refresh():
         for r in range(-48, 48):
             if 0 < Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] <= 7:
                 LANDMARK_POSITION_LIST.append((c+80, r+48))
+            elif MotionPlanner.PATH_MAP[Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 1:
+                ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_PINK
             elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 1:
                 ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_LETHALWALL
             elif Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 99:
