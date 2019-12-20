@@ -1,6 +1,7 @@
 #TIRAMISU Robot - MASTER
 import math
 import serial
+import time
 import Poser
 import Topographer
 import MotionPlanner
@@ -33,18 +34,19 @@ def victim(victim_type):
 
 
 while True:
+    t = time.time()
     Signalizer.graphics_refresh()
     #Poser.get_robot_pose()
     Topographer.plot_presence()
     if Topographer.SWEEPER_IS_ON:
         Topographer.plot_walls()
-    if Topographer.AVOID == 0:
-        MotionPlanner.plan_path()
-        SERIAL.write(int(MotionPlanner.ROBOT_ANGLE_ERROR+90))
-    elif Topographer.AVOID == -1:
-        SERIAL.write(201)
-    elif Topographer.AVOID == 1:
-        SERIAL.write(202)
+        if Topographer.AVOID == 0:
+            MotionPlanner.plan_path()
+            SERIAL.write(int(MotionPlanner.ROBOT_ANGLE_ERROR+90))
+        elif Topographer.AVOID == -1:
+            SERIAL.write(201)
+        elif Topographer.AVOID == 1:
+            SERIAL.write(202)
     if SERIAL.in_waiting:
         while SERIAL.in_waiting:
             COMMAND = SERIAL.read()
@@ -59,5 +61,6 @@ while True:
             elif COMMAND == 21 and not Topographer.SWEEPER_IS_ON:
                 Topographer.sweeper_on(True)
         LAST_COMMAND = COMMAND
-    if MotionPlanner.MAZE_FINISHED and math.sqrt(math.pow((500 - Poser.ROBOT_POSITION_X), 2) + math.pow((500 - Poser.ROBOT_POSITION_Y), 2)) < 5:
-        exit_bonus()
+#    if MotionPlanner.MAZE_FINISHED and math.sqrt(math.pow((500 - Poser.ROBOT_POSITION_X), 2) + math.pow((500 - Poser.ROBOT_POSITION_Y), 2)) < 5 and Topographer.SWEEPER_IS_ON:
+#        exit_bonus()
+    print(time.time() - t)
