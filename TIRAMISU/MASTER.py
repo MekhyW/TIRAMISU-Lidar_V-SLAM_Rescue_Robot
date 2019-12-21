@@ -35,7 +35,7 @@ def victim(victim_type):
 while True:
     t = time.time()
     Signalizer.graphics_refresh()
-    #Poser.get_robot_pose()
+    Poser.get_robot_pose()
     Topographer.plot_presence()
     if Topographer.SWEEPER_IS_ON:
         Topographer.plot_walls()
