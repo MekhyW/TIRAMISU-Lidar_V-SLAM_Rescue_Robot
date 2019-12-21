@@ -42,7 +42,6 @@ while True:
         if Topographer.AVOID == 0:
             MotionPlanner.plan_path()
             SERIAL.write(int(MotionPlanner.ROBOT_ANGLE_ERROR+90))
-            print (int(MotionPlanner.ROBOT_ANGLE_ERROR+90))
         elif Topographer.AVOID == -1:
             SERIAL.write(201)
         elif Topographer.AVOID == 1:
@@ -63,4 +62,4 @@ while True:
         LAST_COMMAND = COMMAND
     #if MotionPlanner.MAZE_FINISHED and math.sqrt(math.pow((500 - Poser.ROBOT_POSITION_X), 2) + math.pow((500 - Poser.ROBOT_POSITION_Y), 2)) < 5 and Topographer.SWEEPER_IS_ON:
     #    exit_bonus()
-    #print(time.time() - t)
+    print(time.time() - t)

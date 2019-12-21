@@ -9,9 +9,7 @@ CURRENT_FLOOR = 1
 CURRENT_FLOOR_LAST = 1
 ROBOT_POSITION_X = 500
 ROBOT_POSITION_Y = 500
-ROBOT_INCLINATION = 0
 ROBOT_COMPASS = 0
-ROBOT_TILT = 0
 
 
 def quaternion_to_euler(x, y, z, w):
@@ -29,25 +27,29 @@ def quaternion_to_euler(x, y, z, w):
 
 
 def get_robot_pose():
-    pipe.start(cfg)
-    try:
-        frames = pipe.wait_for_frames()
-        pose = frames.get_pose_frame()
-        if pose:
-            data = pose.get_pose_data()
-            global ROBOT_INCLINATION, ROBOT_COMPASS, ROBOT_TILT, CURRENT_FLOOR, CURRENT_FLOOR_LAST, ROBOT_POSITION_X, ROBOT_POSITION_Y
-            ROBOT_INCLINATION, ROBOT_COMPASS, ROBOT_TILT = quaternion_to_euler(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w)
-            ROBOT_POSITION_X = (data.translation.x * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 500
-            ROBOT_POSITION_Y = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(ROBOT_COMPASS))) + 500
-            CURRENT_FLOOR_LAST = CURRENT_FLOOR
-            if data.translation.y * 100 > 30:
-                CURRENT_FLOOR = 2
-            elif data.translation.y * 100 < (-30):
-                CURRENT_FLOOR = 0
+    global ROBOT_COMPASS, CURRENT_FLOOR, CURRENT_FLOOR_LAST, ROBOT_POSITION_X, ROBOT_POSITION_Y
+    frames = pipe.wait_for_frames()
+    pose = frames.get_pose_frame()
+    if pose:
+        data = pose.get_pose_data()
+        Alpha, Beta, Gamma = quaternion_to_euler(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w)
+        ROBOT_COMPASS = int(Beta*(-1))
+        if not 0 < abs(Alpha) < 90:
+            if ROBOT_COMPASS > 0:
+                ROBOT_COMPASS = 180 - ROBOT_COMPASS
             else:
-                CURRENT_FLOOR = 1
-            if CURRENT_FLOOR_LAST != CURRENT_FLOOR:
-                Topographer.plot_black_tile(CURRENT_FLOOR_LAST)
-    finally:
-        pipe.stop()
+                ROBOT_COMPASS = (-180) - ROBOT_COMPASS
+        if ROBOT_COMPASS < 0:
+            ROBOT_COMPASS += 360
+        ROBOT_POSITION_X = (data.translation.x * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 500
+        ROBOT_POSITION_Y = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(ROBOT_COMPASS))) + 500
+        CURRENT_FLOOR_LAST = CURRENT_FLOOR
+        if data.translation.y * 100 > 30:
+            CURRENT_FLOOR = 2
+        elif data.translation.y * 100 < (-30):
+            CURRENT_FLOOR = 0
+        else:
+            CURRENT_FLOOR = 1
+        if CURRENT_FLOOR_LAST != CURRENT_FLOOR:
+            Topographer.plot_black_tile(CURRENT_FLOOR_LAST)
         

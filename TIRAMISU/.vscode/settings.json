@@ -1,7 +1,7 @@
 {
-    "python.pythonPath": "C:\\Users\\dell 1\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
+    "python.pythonPath": "C:\\Users\\dell 1\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe",
     "python.linting.pylintEnabled": true,
     "python.linting.banditEnabled": false,
-    "python.linting.enabled": true
-    "python.linting.pylintArgs": ["--extension-pkg-whitelist=pygame"]
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": ["--extension-pkg-whitelist=pygame, pyrealsense2"]
 }
