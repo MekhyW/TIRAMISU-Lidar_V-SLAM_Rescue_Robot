@@ -37,7 +37,7 @@ class Node:
         global SEARCH_DONE
         UNVISITED_NODE_LIST.remove(self)
         VISITED_NODE_LIST.append(self)
-        if(Topographer.PRESENCE_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y] == 0 and 0 < Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y] < 3):
+        if(Topographer.PRESENCE_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y] == 0 and Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y] > 0):
             SEARCH_DONE = True
             self.backtrace_path()
         elif(self.position_x == 500 and self.position_y == 500):

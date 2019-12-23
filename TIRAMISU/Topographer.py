@@ -34,6 +34,7 @@ def plot_walls():
     global AVOID
     AVOID = 0
     for angle in [x for x in range(0, 360) if x not in range(91, 270)]:
+    #for angle in range(0, 360):
         angcos = math.cos(math.radians(angle+Poser.ROBOT_COMPASS))
         angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
         distance = (lidardata[angle] * 0.1) + 3.3
@@ -51,7 +52,7 @@ def plot_walls():
                     WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
                     for c in range(-10, 11):
                         for r in range(-10, 11):
-                            if math.sqrt((c*c)+(r*r)) <= 5:
+                            if math.sqrt((c*c)+(r*r)) <= 6:
                                 WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= 1
                             elif math.sqrt((c*c)+(r*r)) <= 15 and EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] >= 15-math.sqrt((c*c)+(r*r)):
                                 EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= 15-math.sqrt((c*c)+(r*r))
@@ -59,7 +60,7 @@ def plot_walls():
                     WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(distance*angcos))][round(Poser.ROBOT_POSITION_Y+(distance*angsin))] = 1
                     for c in range(-10, 11):
                         for r in range(-10, 11):
-                            if math.sqrt((c*c)+(r*r)) <= 5:
+                            if math.sqrt((c*c)+(r*r)) <= 6:
                                 WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(distance*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(distance*angsin)) + r] += 1
                             elif math.sqrt((c*c)+(r*r)) <= 15:
                                 EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X+(distance*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(distance*angsin)) + r] += 15-math.sqrt((c*c)+(r*r))
