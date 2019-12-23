@@ -3,12 +3,8 @@ import mypylidar3
 import Poser
 Sweeper = mypylidar3.YdLidarX4('COM6', 5000)
 Sweeper.Connect()
-
-#SWEEPER_IS_ON = False
-#SWEEPER_GENERATOR = None
 SWEEPER_IS_ON = True
 SWEEPER_GENERATOR = Sweeper.StartScanning()
-
 AVOID = 0
 LANDMARK_MAP = [[[0 for x in range(1000)] for y in range(1000)] for z in range(3)]
 PRESENCE_MAP = [[[0 for x in range(1000)] for y in range(1000)] for z in range(3)]
@@ -34,7 +30,6 @@ def plot_walls():
     global AVOID
     AVOID = 0
     for angle in [x for x in range(0, 360) if x not in range(91, 270)]:
-    #for angle in range(0, 360):
         angcos = math.cos(math.radians(angle+Poser.ROBOT_COMPASS))
         angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
         distance = (lidardata[angle] * 0.1) + 3.3
