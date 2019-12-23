@@ -23,21 +23,21 @@ LANDMARK_POSITION_LIST = []
 def graphics_refresh():
     for c in range(-80, 80):
         for r in range(-48, 48):
-            if 0 < Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] <= 7:
+            if 0 < Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + c)][round(Poser.ROBOT_POSITION_Y + r)] <= 7:
                 LANDMARK_POSITION_LIST.append((c+80, r+48))
-            elif MotionPlanner.PATH_MAP[Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 1:
+            elif MotionPlanner.PATH_MAP[round(Poser.ROBOT_POSITION_X + c)][round(Poser.ROBOT_POSITION_Y + r)] == 1:
                 ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_PINK
-            elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 1:
+            elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + c)][round(Poser.ROBOT_POSITION_Y + r)] == 1:
                 ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_LETHALWALL
-            elif Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 99:
+            elif Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + c)][round(Poser.ROBOT_POSITION_Y + r)] == 99:
                 ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_BLACKTILE
-            elif Topographer.WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] > 0:
+            elif Topographer.WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + c)][round(Poser.ROBOT_POSITION_Y + r)] > 0:
                 ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_SPLASHWALL
-            elif Topographer.PRESENCE_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 1:
+            elif Topographer.PRESENCE_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + c)][round(Poser.ROBOT_POSITION_Y + r)] == 1:
                 ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_PRESENCE
-            elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == 0:
+            elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + c)][round(Poser.ROBOT_POSITION_Y + r)] == 0:
                 ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_FREESPACE
-            elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][Poser.ROBOT_POSITION_X + c][Poser.ROBOT_POSITION_Y + r] == -1:
+            elif Topographer.WALL_MAP[Poser.CURRENT_FLOOR][round(Poser.ROBOT_POSITION_X + c)][round(Poser.ROBOT_POSITION_Y + r)] == -1:
                 ON_SCREEN_PALETTE[c + 80][r + 48] = COLOUR_UNKNOWN
     for lm in LANDMARK_POSITION_LIST:
         pygame.draw.circle(OriginalSurface, COLOUR_PINK, lm, 10)

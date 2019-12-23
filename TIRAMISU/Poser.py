@@ -41,7 +41,10 @@ def get_robot_pose():
                 ROBOT_COMPASS = (-180) - ROBOT_COMPASS
         if ROBOT_COMPASS < 0:
             ROBOT_COMPASS += 360
-        ROBOT_POSITION_X = (data.translation.x * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 500
+        ROBOT_COMPASS += 90
+        if ROBOT_COMPASS > 360:
+            ROBOT_COMPASS -= 360
+        ROBOT_POSITION_X = (((-1) * data.translation.x) * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 500
         ROBOT_POSITION_Y = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(ROBOT_COMPASS))) + 500
         CURRENT_FLOOR_LAST = CURRENT_FLOOR
         if data.translation.y * 100 > 30:

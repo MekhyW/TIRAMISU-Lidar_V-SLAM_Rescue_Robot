@@ -27,8 +27,8 @@ def get_angle_error(current_angle, current_x, current_y, target_x, target_y):
 
 class Node:
     def __init__(self, position_x, position_y, previous_node):
-        self.position_x = position_x
-        self.position_y = position_y
+        self.position_x = round(position_x)
+        self.position_y = round(position_y)
         self.previous_node = previous_node
         self.euclidean_distance = math.sqrt(math.pow((self.position_x - Poser.ROBOT_POSITION_X), 2) + math.pow((self.position_y - Poser.ROBOT_POSITION_Y), 2))
         self.graph_distance = self.euclidean_distance + Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y]
@@ -54,8 +54,6 @@ class Node:
             ROBOT_ANGLE_ERROR = constrain(get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, self.position_x, self.position_y), -90, 90)
         else:
             self.previous_node.backtrace_path()
-    def __eq__(self, other): 
-        return self.__dict__ == other.__dict__
                     
 
 def plan_path():
