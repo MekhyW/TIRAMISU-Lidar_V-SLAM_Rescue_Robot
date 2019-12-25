@@ -31,20 +31,20 @@ class Node:
         self.position_y = round(position_y)
         self.previous_node = previous_node
         self.euclidean_distance = math.sqrt(math.pow((self.position_x - Poser.ROBOT_POSITION_X), 2) + math.pow((self.position_y - Poser.ROBOT_POSITION_Y), 2))
-        self.graph_distance = self.euclidean_distance + Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y]
+        self.graph_distance = self.euclidean_distance + Topographer.EDGE_WEIGHT_MAP[self.position_x][self.position_y]
         EXISTENT_NODE_MAP[self.position_x][self.position_y] = 1
     def visit(self):
         global SEARCH_DONE
         UNVISITED_NODE_LIST.remove(self)
         VISITED_NODE_LIST.append(self)
-        if(Topographer.PRESENCE_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y] == 0 and Topographer.EDGE_WEIGHT_MAP[Poser.CURRENT_FLOOR][self.position_x][self.position_y] > 0):
+        if(Topographer.PRESENCE_MAP[self.position_x][self.position_y] == 0 and Topographer.EDGE_WEIGHT_MAP[self.position_x][self.position_y] > 0):
             SEARCH_DONE = True
             self.backtrace_path()
         elif(self.position_x == 500 and self.position_y == 500):
             self.backtrace_path()
         for c in range(-1, 2):
             for r in range(-1, 2):
-                if(EXISTENT_NODE_MAP[self.position_x+c][self.position_y+r] == 0 and Topographer.WALL_MAP[Poser.CURRENT_FLOOR][self.position_x+c][self.position_y+r] == 0 and Topographer.WALL_SPLASH_MAP[Poser.CURRENT_FLOOR][self.position_x+c][self.position_y+r] <= 0 and Topographer.LANDMARK_MAP[Poser.CURRENT_FLOOR][self.position_x+c][self.position_y+r] != 99):
+                if(EXISTENT_NODE_MAP[self.position_x+c][self.position_y+r] == 0 and Topographer.WALL_MAP[self.position_x+c][self.position_y+r] == 0 and Topographer.WALL_SPLASH_MAP[self.position_x+c][self.position_y+r] <= 0 and Topographer.LANDMARK_MAP[self.position_x+c][self.position_y+r] != 99):
                     node = Node(self.position_x+c, self.position_y+r, self)
                     UNVISITED_NODE_LIST.append(node)
     def backtrace_path(self):

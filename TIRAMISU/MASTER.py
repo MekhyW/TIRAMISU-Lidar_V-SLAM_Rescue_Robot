@@ -52,7 +52,7 @@ while True:
             COMMAND = SERIAL.read()
         if COMMAND != LAST_COMMAND:
             if COMMAND == 99:
-                Topographer.plot_black_tile(Poser.CURRENT_FLOOR)
+                Topographer.plot_black_tile()
             elif 0 < int(COMMAND) <= 14:
                 if Topographer.plot_victim(int(COMMAND)):
                     victim(int(COMMAND))
