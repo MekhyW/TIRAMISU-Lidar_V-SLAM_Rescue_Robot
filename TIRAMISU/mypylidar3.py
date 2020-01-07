@@ -118,7 +118,7 @@ class YdLidarX4:
                 distdict = {}
                 countdict = {}
                 while self._is_scanning == True:
-                    for i in range(0,360):
+                    for i in [x for x in range(0, 360) if x not in range(91, 270)]:
                         distdict.update({i:[]})
                     data = self._s.read(self.chunk_size).split(b"\xaa\x55")[1:-1]
                     for e in data:

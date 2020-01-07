@@ -18,8 +18,10 @@ def exit_bonus():
 def victim(victim_type):
     if not victim_type in (4, 11, 7, 14):
         while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) > 30:
+            Poser.get_robot_pose()
             SERIAL.write(180)
         while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) < -30:
+            Poser.get_robot_pose()
             SERIAL.write(0)
     for _ in range(10):
         SERIAL.write(200)
@@ -37,8 +39,8 @@ while True:
     t = time.time()
     Signalizer.graphics_refresh()
     Poser.get_robot_pose()
-    Topographer.plot_presence()
     if Topographer.SWEEPER_IS_ON:
+        Topographer.plot_presence()
         Topographer.plot_walls()
         if Topographer.AVOID == 0:
             MotionPlanner.plan_path()

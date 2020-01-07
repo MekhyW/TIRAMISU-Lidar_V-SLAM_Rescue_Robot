@@ -1,7 +1,7 @@
 import math
 import mypylidar3
 import Poser
-Sweeper = mypylidar3.YdLidarX4('COM6', 5000)
+Sweeper = mypylidar3.YdLidarX4('COM6', 3500)
 Sweeper.Connect()
 SWEEPER_IS_ON = True
 SWEEPER_GENERATOR = Sweeper.StartScanning()
@@ -43,7 +43,7 @@ def plot_walls():
                     break
                 if WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == (-1):
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
-                elif WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == 1:
+                elif WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == 1 and distance <= 30:
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
                     for c in range(-10, 11):
                         for r in range(-10, 11):
