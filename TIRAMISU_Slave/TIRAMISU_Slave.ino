@@ -25,7 +25,13 @@ void loop() {
   ReadReflection();
   ReadTemperature();
   ReadCams();
-  if(OnBlackTile==true){
+  if(digitalRead(23)==LOW){
+    MotorsStop();
+    while(digitalRead(23)==LOW){
+      Serial.println(20);
+      MotorsRelease(); 
+    }
+  } else if(OnBlackTile==true){
     Serial.println(99);
     while(OnBlackTile==true){
       Move(-200, -200);
@@ -33,12 +39,6 @@ void loop() {
     }
   } else if(Victim==true){
     Serial.println(victim_type);
-  } else if(digitalRead(23)==LOW){
-    MotorsStop();
-    while(digitalRead(23)==LOW){
-      Serial.println(20);
-      MotorsRelease(); 
-    }
   } else {
     Serial.println(21);
   }
