@@ -7,6 +7,7 @@
 #include "Actuators.h"
 int Command;
 int LastCommand;
+int MoveError = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -59,12 +60,13 @@ void loop() {
       } else if(Command==202){
         AvoidRight();
       } else if(Command>=0 && Command<=180 && OnBlackTile==false){
-      	if((Command-90)<(-30)){
+      	MoveError = ((Command-90)*0.5) + (MoveError*0.5);
+      	if(MoveError < (-30)){
       		Move(200, -200)
-      	} else if((Command-90)>30){
+      	} else if(MoveError > 30){
       		Move(-200, 200)
       	} else {
-      		Move(constrain(200-((Command-90)*Kp), 0, 250), constrain(200+((Command-90)*Kp), 0, 250));
+      		Move(constrain(200-(MoveError*Kp), 0, 200), constrain(200+(MoveError*Kp), 0, 200));
       	}
       }
     }
