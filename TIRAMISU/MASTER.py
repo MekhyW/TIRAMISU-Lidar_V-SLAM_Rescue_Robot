@@ -17,14 +17,12 @@ def exit_bonus():
 
 def victim(victim_type):
     if not victim_type in (4, 11, 7, 14):
-        while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) > 30:
+        while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) > 15:
             Poser.get_robot_pose()
             SERIAL.write(180)
-        while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) < -30:
+        while MotionPlanner.get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, Topographer.VICTIM_X, Topographer.VICTIM_Y) < -15:
             Poser.get_robot_pose()
             SERIAL.write(0)
-    for _ in range(10):
-        SERIAL.write(200)
     if victim_type in (2, 9, 5, 12):
         for _ in range(10):
             SERIAL.write(252)
@@ -65,4 +63,4 @@ while True:
         LAST_COMMAND = COMMAND
     if MotionPlanner.MAZE_FINISHED and math.sqrt(math.pow((500 - Poser.ROBOT_POSITION_X), 2) + math.pow((500 - Poser.ROBOT_POSITION_Y), 2)) < 5 and Topographer.SWEEPER_IS_ON:
         exit_bonus()
-    print(time.time() - t)
+    print(time.time() - t, MotionPlanner.ROBOT_ANGLE_ERROR)

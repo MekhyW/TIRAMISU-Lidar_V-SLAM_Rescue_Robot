@@ -15,13 +15,9 @@ def constrain(val, min_val, max_val):
 
 def get_angle_error(current_angle, current_x, current_y, target_x, target_y):
     if current_angle > 180:
-        result = math.degrees(math.atan2(target_y-current_y, target_x-current_x) - (current_angle-360))
+        result = math.degrees(math.atan2(target_y-current_y, target_x-current_x)) - (current_angle-360)
     else:
-        result = math.degrees(math.atan2(target_y-current_y, target_x-current_x) - current_angle)
-    if result >= 360:
-        result -= 360
-    elif result <= -360:
-        result += 360
+        result = math.degrees(math.atan2(target_y-current_y, target_x-current_x)) - current_angle
     return result
 
 

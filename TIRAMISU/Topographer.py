@@ -1,7 +1,7 @@
 import math
 import mypylidar3
 import Poser
-Sweeper = mypylidar3.YdLidarX4('COM6', 3500)
+Sweeper = mypylidar3.YdLidarX4('COM6', 3000)
 Sweeper.Connect()
 SWEEPER_IS_ON = True
 SWEEPER_GENERATOR = Sweeper.StartScanning()
@@ -34,27 +34,27 @@ def plot_walls():
         angsin = math.sin(math.radians(angle+Poser.ROBOT_COMPASS))
         distance = (lidardata[angle] * 0.1) + 3.3
         if distance > 3.3 and 9 <= Poser.ROBOT_POSITION_X+(distance*angcos) < 991 and 9 <= Poser.ROBOT_POSITION_Y+(distance*angsin) < 991:
-            if 15 < angle < 45 and distance < 14:
-                AVOID = 1
-            elif 315 < angle < 345 and distance < 14:
-                AVOID = -1
+            #if 15 < angle < 45 and distance < 14:
+            #    AVOID = 1
+            #elif 315 < angle < 345 and distance < 14:
+            #    AVOID = -1
             for i in range(0, round(distance)):
-                if i > 30:
+                if i > 60:
                     break
                 if WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == (-1):
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
-                elif WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == 1 and distance <= 30:
+                elif WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == 1:
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
-                    for c in range(-10, 11):
-                        for r in range(-10, 11):
+                    for c in range(-15, 16):
+                        for r in range(-15, 16):
                             if math.sqrt((c*c)+(r*r)) <= 6:
                                 WALL_SPLASH_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= 1
                             elif math.sqrt((c*c)+(r*r)) <= 15 and EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] >= 15-math.sqrt((c*c)+(r*r)):
                                 EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= 15-math.sqrt((c*c)+(r*r))
                 if i == round(distance)-1 and WALL_MAP[round(Poser.ROBOT_POSITION_X+(distance*angcos))][round(Poser.ROBOT_POSITION_Y+(distance*angsin))] in (-1, 0):
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(distance*angcos))][round(Poser.ROBOT_POSITION_Y+(distance*angsin))] = 1
-                    for c in range(-10, 11):
-                        for r in range(-10, 11):
+                    for c in range(-15, 16):
+                        for r in range(-15, 16):
                             if math.sqrt((c*c)+(r*r)) <= 6:
                                 WALL_SPLASH_MAP[round(Poser.ROBOT_POSITION_X+(distance*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(distance*angsin)) + r] += 1
                             elif math.sqrt((c*c)+(r*r)) <= 15:
@@ -62,8 +62,8 @@ def plot_walls():
 
 
 def plot_presence():
-    for c in range(-15, 15):
-        for r in range(-15, 15):
+    for c in range(-15, 16):
+        for r in range(-15, 16):
             if math.sqrt((c*c)+(r*r)) <= 15:
                 PRESENCE_MAP[round(Poser.ROBOT_POSITION_X+c)][round(Poser.ROBOT_POSITION_Y+r)] = 1
 
