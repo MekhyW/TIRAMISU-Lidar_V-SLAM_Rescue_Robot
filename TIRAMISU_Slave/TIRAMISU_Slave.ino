@@ -51,9 +51,11 @@ void loop() {
       if(Command==200){
         MotorsStop();
       } else if(Command==252){
+      	MotorsStop();
         DeployKit();
         DeployKit();
       } else if(Command==251){
+      	MotorsStop();
         DeployKit();
       } else if(Command==201){
         AvoidLeft();
