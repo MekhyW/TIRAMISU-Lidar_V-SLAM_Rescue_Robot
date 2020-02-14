@@ -1,7 +1,7 @@
 import math
 import mypylidar3
 import Poser
-Sweeper = mypylidar3.YdLidarX4('COM6', 3000)
+Sweeper = mypylidar3.YdLidarX4('COM6', 6000)
 Sweeper.Connect()
 SWEEPER_IS_ON = True
 SWEEPER_GENERATOR = Sweeper.StartScanning()
@@ -39,33 +39,34 @@ def plot_walls():
             #elif 315 < angle < 345 and distance < 14:
             #    AVOID = -1
             for i in range(0, round(distance)):
-                if i > 60:
+                if (not Poser.ROBOT_POSITION_CONFIDENCE >= 2) or i > 60 or (i > 20 and Poser.ROBOT_TILT_DEVIATION >= 10):
                     break
                 if WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == (-1):
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
                 elif WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] == 1:
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos))][round(Poser.ROBOT_POSITION_Y+(i*angsin))] = 0
-                    for c in range(-15, 16):
-                        for r in range(-15, 16):
-                            if math.sqrt((c*c)+(r*r)) <= 6:
+                    for c in range(-14, 15):
+                        for r in range(-14, 15):
+                            if math.sqrt((c*c)+(r*r)) <= 9:
                                 WALL_SPLASH_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= 1
                             elif math.sqrt((c*c)+(r*r)) <= 15 and EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] >= 15-math.sqrt((c*c)+(r*r)):
-                                EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= 15-math.sqrt((c*c)+(r*r))
+                                EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(i*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(i*angsin)) + r] -= abs(15-math.sqrt((c*c)+(r*r)))
                 if i == round(distance)-1 and WALL_MAP[round(Poser.ROBOT_POSITION_X+(distance*angcos))][round(Poser.ROBOT_POSITION_Y+(distance*angsin))] in (-1, 0):
                     WALL_MAP[round(Poser.ROBOT_POSITION_X+(distance*angcos))][round(Poser.ROBOT_POSITION_Y+(distance*angsin))] = 1
-                    for c in range(-15, 16):
-                        for r in range(-15, 16):
-                            if math.sqrt((c*c)+(r*r)) <= 6:
+                    for c in range(-14, 15):
+                        for r in range(-14, 15):
+                            if math.sqrt((c*c)+(r*r)) <= 9:
                                 WALL_SPLASH_MAP[round(Poser.ROBOT_POSITION_X+(distance*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(distance*angsin)) + r] += 1
                             elif math.sqrt((c*c)+(r*r)) <= 15:
-                                EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(distance*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(distance*angsin)) + r] += 15-math.sqrt((c*c)+(r*r))
+                                EDGE_WEIGHT_MAP[round(Poser.ROBOT_POSITION_X+(distance*angcos)) + c][round(Poser.ROBOT_POSITION_Y+(distance*angsin)) + r] += abs(15-math.sqrt((c*c)+(r*r)))
 
 
 def plot_presence():
-    for c in range(-15, 16):
-        for r in range(-15, 16):
-            if math.sqrt((c*c)+(r*r)) <= 15:
-                PRESENCE_MAP[round(Poser.ROBOT_POSITION_X+c)][round(Poser.ROBOT_POSITION_Y+r)] = 1
+    if Poser.ROBOT_POSITION_CONFIDENCE >= 2:
+        for c in range(-15, 16):
+            for r in range(-15, 16):
+                if math.sqrt((c*c)+(r*r)) <= 15:
+                    PRESENCE_MAP[round(Poser.ROBOT_POSITION_X+c)][round(Poser.ROBOT_POSITION_Y+r)] = 1
 
 
 def plot_black_tile():

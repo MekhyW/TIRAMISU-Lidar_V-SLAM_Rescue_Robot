@@ -46,7 +46,7 @@ class Node:
     def backtrace_path(self):
         global ROBOT_ANGLE_ERROR
         PATH_MAP[self.position_x][self.position_y] = 1
-        if round(self.euclidean_distance) <= 10:
+        if round(self.euclidean_distance) <= 15:
             ROBOT_ANGLE_ERROR = constrain(get_angle_error(Poser.ROBOT_COMPASS, Poser.ROBOT_POSITION_X, Poser.ROBOT_POSITION_Y, self.position_x, self.position_y), -90, 90)
         else:
             self.previous_node.backtrace_path()

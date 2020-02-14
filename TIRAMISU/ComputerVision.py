@@ -3,6 +3,7 @@ from pyb import LED,UART,Pin
 sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QQSIF)
+sensor.skip_frames(time = 2000)
 sensor.set_auto_gain(True)
 sensor.set_auto_whitebal(False)
 sensor.set_auto_exposure(True)

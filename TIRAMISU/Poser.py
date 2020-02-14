@@ -7,7 +7,9 @@ cfg.enable_stream(rs.stream.pose)
 pipe.start(cfg)
 ROBOT_POSITION_X = 500
 ROBOT_POSITION_Y = 500
+ROBOT_POSITION_CONFIDENCE = 2
 ROBOT_COMPASS = 0
+ROBOT_TILT_DEVIATION = 0
 
 
 def quaternion_to_euler(x, y, z, w):
@@ -25,7 +27,7 @@ def quaternion_to_euler(x, y, z, w):
 
 
 def get_robot_pose():
-    global ROBOT_COMPASS, ROBOT_POSITION_X, ROBOT_POSITION_Y
+    global ROBOT_COMPASS, ROBOT_POSITION_X, ROBOT_POSITION_Y, ROBOT_POSITION_CONFIDENCE, ROBOT_TILT_DEVIATION
     frames = pipe.wait_for_frames()
     pose = frames.get_pose_frame()
     if pose:
@@ -44,4 +46,10 @@ def get_robot_pose():
             ROBOT_COMPASS -= 360
         ROBOT_POSITION_X = (((-1) * data.translation.x) * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 500
         ROBOT_POSITION_Y = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(ROBOT_COMPASS))) + 500
+        ROBOT_POSITION_CONFIDENCE = data.tracker_confidence
+        if (Alpha >= 0 and Gamma <= 0) or (Alpha <= 0 and Gamma >= 0):
+            ROBOT_TILT_DEVIATION = Alpha + Gamma
+        else:
+            ROBOT_TILT_DEVIATION = abs(Alpha - Gamma)
+        ROBOT_TILT_DEVIATION = abs(ROBOT_TILT_DEVIATION)
         

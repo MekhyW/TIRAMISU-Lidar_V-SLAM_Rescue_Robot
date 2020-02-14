@@ -6,7 +6,7 @@ import Poser
 import Topographer
 import MotionPlanner
 import Signalizer
-SERIAL = serial.Serial('COM26', 115200)
+SERIAL = serial.Serial('COM27', 115200)
 COMMAND = None
 LAST_COMMAND = None
 
@@ -63,4 +63,4 @@ while True:
         LAST_COMMAND = COMMAND
     if MotionPlanner.MAZE_FINISHED and math.sqrt(math.pow((500 - Poser.ROBOT_POSITION_X), 2) + math.pow((500 - Poser.ROBOT_POSITION_Y), 2)) < 5 and Topographer.SWEEPER_IS_ON:
         exit_bonus()
-    print(time.time() - t, MotionPlanner.ROBOT_ANGLE_ERROR)
+    print(time.time() - t, Poser.ROBOT_POSITION_CONFIDENCE, MotionPlanner.ROBOT_ANGLE_ERROR)
