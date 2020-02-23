@@ -63,12 +63,12 @@ void loop() {
         AvoidRight();
       } else if(Command>=0 && Command<=180 && OnBlackTile==false){
       	MoveError = ((Command-90)*0.5) + (MoveError*0.5);
-      	if(MoveError < (-30)){
+      	if(MoveError <= (-30)){
       		Move(200, -200)
-      	} else if(MoveError > 30){
+      	} else if(MoveError >= 30){
       		Move(-200, 200)
       	} else {
-      		Move(constrain(200-(MoveError*Kp), 0, 200), constrain(200+(MoveError*Kp), 0, 200));
+      		Move(constrain(200+(MoveError*Kp), 0, 200), constrain(200-(MoveError*Kp), 0, 200));
       	}
       }
     }
