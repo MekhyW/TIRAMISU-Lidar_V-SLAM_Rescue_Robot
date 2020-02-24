@@ -18,7 +18,7 @@ Servo Deployer;
 #define RDriverSTDBY 0
 int SpeedLeft=0;
 int SpeedRight=0;
-#define Kp 4
+#define Kp 2
 
 void MotorsRelease() {
   analogWrite(motorUL, 0);

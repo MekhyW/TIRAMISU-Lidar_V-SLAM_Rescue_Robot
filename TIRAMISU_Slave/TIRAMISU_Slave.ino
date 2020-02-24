@@ -68,7 +68,7 @@ void loop() {
       	} else if(MoveError >= 30){
       		Move(-200, 200)
       	} else {
-      		Move(constrain(200+(MoveError*Kp), 0, 200), constrain(200-(MoveError*Kp), 0, 200));
+      		Move(constrain(200+(MoveError*Kp), 0, 250), constrain(200-(MoveError*Kp), 0, 250));
       	}
       }
     }
